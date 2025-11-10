@@ -178,8 +178,14 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 // Create listing with photos (LOCAL FILE STORAGE)
 router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    console.log('Creating listing for user:', req.user?.id);
+    console.log('Request body:', req.body);
+    console.log('Files count:', (req.files as any[] || []).length);
+
     // Валидируем входные данные
     const validatedData = createListingSchema.parse(req.body);
+    console.log('Validation passed:', validatedData);
+
     const {
       brand,
       model,
@@ -195,6 +201,8 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       size: file.size,
     }));
 
+    console.log('Photos processed:', photos.length);
+
     if (photos.length === 0) {
       res.status(400).json({
         error: 'At least one photo is required',
@@ -203,6 +211,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     }
 
     const listingId = uuidv4();
+    console.log('Inserting listing:', { listingId, userId: req.user?.id, brand, model, year, price });
 
     // Use model if provided, otherwise use brand as model_name
     const result = await query(
@@ -226,6 +235,8 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       ]
     );
 
+    console.log('Listing created successfully:', result.rows[0].id);
+
     res.status(201).json({
       message: 'Listing created successfully',
       id: result.rows[0].id,
@@ -235,13 +246,15 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     if (error instanceof z.ZodError) {
       const errors = formatValidationErrors(error);
       logger.error('Listing validation error:', error as Error);
+      console.error('Validation error details:', errors);
       res.status(400).json({
         error: 'Validation failed',
         details: errors,
       });
     } else {
       logger.error('Create listing error:', error as Error);
-      res.status(500).json({ error: 'Failed to create listing' });
+      console.error('Create listing error details:', (error as any).message);
+      res.status(500).json({ error: 'Failed to create listing', details: (error as any).message });
     }
   }
 });
