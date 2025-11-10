@@ -66,8 +66,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setError(null);
     try {
+      console.log('AuthContext.login called for:', email);
       const response = (await api.loginUser(email, password)) as any;
+      console.log('Login response:', response);
+      console.log('Token from response:', response.token);
+
+      // Make sure token is set in api client
+      if (response.token) {
+        console.log('Setting token in API client');
+        api.setToken(response.token);
+      }
+
       setUser(response.user);
+      console.log('User set in context:', response.user);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       setError(errorMessage);
