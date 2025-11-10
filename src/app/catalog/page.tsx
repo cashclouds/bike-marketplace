@@ -202,10 +202,32 @@ export default function CatalogPage() {
 
           <main className="flex-1">
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-              <h2 className="text-2xl font-bold">{t('bicyclesForSale')}</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                {listings.length} {t('listings')}
-              </p>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-2xl font-bold">{t('bicyclesForSale')}</h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {listings.length} {t('listings')}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder={t('search_placeholder') || 'Search by model, brand...'}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    // The search is already handled by the filter state change
+                    // This button is just for visual UX
+                  }}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                >
+                  🔍 {t('search') || 'Search'}
+                </button>
+              </div>
             </div>
 
             {error && (
