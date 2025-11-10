@@ -132,10 +132,16 @@ export default function SellPage() {
         let errorMessage = `HTTP ${response.status}`;
         try {
           const errorData = await response.json();
-          errorMessage = errorData.error || errorData.message || errorMessage;
+          console.log('Error response data:', errorData);
+          errorMessage = errorData.error || errorData.message || JSON.stringify(errorData) || errorMessage;
         } catch (e) {
-          const text = await response.text();
-          console.error('Error response text:', text);
+          try {
+            const text = await response.text();
+            console.error('Error response text:', text);
+            errorMessage = text || errorMessage;
+          } catch (e2) {
+            console.error('Could not read error response');
+          }
         }
         throw new Error(errorMessage);
       }
