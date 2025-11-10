@@ -58,12 +58,22 @@ export default function SellPage() {
 
     setLoading(true);
     try {
-      // Get auth token
-      const token = localStorage.getItem('authToken');
-      if (!token) {
+      // Check authentication
+      if (!isAuthenticated || !user) {
+        setError('You must be logged in to create a listing');
         router.push('/login');
         return;
       }
+
+      // Get auth token
+      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      if (!token) {
+        setError('Authentication token not found. Please log in again.');
+        router.push('/login');
+        return;
+      }
+
+      console.log('Publishing listing with token:', token.substring(0, 20) + '...');
 
       // Create FormData for multipart upload
       const data = new FormData();
@@ -75,10 +85,14 @@ export default function SellPage() {
 
       // Add photos
       formData.photos.forEach((photo) => {
+        console.log('Adding photo:', photo.file.name);
         data.append('photos', photo.file);
       });
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/listings`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+      console.log('Sending to:', apiUrl + '/listings');
+
+      const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -86,19 +100,34 @@ export default function SellPage() {
         body: data,
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Failed to create listing (${response.status})`);
+        let errorMessage = `HTTP ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorData.message || errorMessage;
+        } catch (e) {
+          const text = await response.text();
+          console.error('Error response text:', text);
+        }
+        throw new Error(errorMessage);
       }
 
       const result = (await response.json()) as any;
+      console.log('Server response:', result);
+
       const listingId = result.id || result.listing?.id;
       if (!listingId) {
         throw new Error('No listing ID returned from server');
       }
+
+      // Success - redirect to listing
       router.push(`/listing?id=${listingId}`);
     } catch (err) {
-      setError((err as any).message || 'Error creating listing');
+      const errorMsg = (err as any).message || 'Error creating listing';
+      console.error('Publish error:', errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
