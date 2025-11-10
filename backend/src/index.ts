@@ -36,7 +36,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(generalLimiter);
 
 // Serve static files (uploaded photos)
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads')));
 
 // HTTP request logging middleware
 app.use(httpLogger);
