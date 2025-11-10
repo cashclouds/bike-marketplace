@@ -68,13 +68,14 @@ export default function SellPage() {
       // Create FormData for multipart upload
       const data = new FormData();
       data.append('brand', formData.brand);
-      data.append('year', formData.year);
-      data.append('price', formData.price);
+      data.append('model', formData.brand); // Use brand as model if not separately provided
+      data.append('year', String(formData.year)); // Ensure year is string for Zod validation
+      data.append('price', String(formData.price)); // Ensure price is string for Zod validation
       data.append('description', formData.description);
 
       // Add photos
-      formData.photos.forEach((photo, index) => {
-        data.append(`photos`, photo.file);
+      formData.photos.forEach((photo) => {
+        data.append('photos', photo.file);
       });
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/listings`, {
@@ -86,11 +87,16 @@ export default function SellPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create listing');
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to create listing (${response.status})`);
       }
 
       const result = (await response.json()) as any;
-      router.push(`/listing?id=${result.id}`);
+      const listingId = result.id || result.listing?.id;
+      if (!listingId) {
+        throw new Error('No listing ID returned from server');
+      }
+      router.push(`/listing?id=${listingId}`);
     } catch (err) {
       setError((err as any).message || 'Error creating listing');
     } finally {
