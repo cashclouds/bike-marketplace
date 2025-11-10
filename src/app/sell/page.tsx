@@ -47,31 +47,41 @@ export default function SellPage() {
   };
 
   const handlePublish = async () => {
+    console.log('handlePublish called! isAuthenticated:', isAuthenticated, 'user:', user?.email);
+
     // Validate form
     if (!formData.brand || !formData.year || !formData.price || !formData.description) {
+      console.log('Form validation failed - missing required fields');
       setError(t('allFieldsRequired') || 'All fields are required');
       return;
     }
 
     if (formData.photos.length === 0) {
+      console.log('Form validation failed - no photos');
       setError(t('photosRequired') || 'At least one photo is required');
       return;
     }
 
+    console.log('Form validation passed');
     setLoading(true);
+
     try {
-      // Check authentication
+      // Check authentication - don't redirect, just show error
       if (!isAuthenticated || !user) {
+        console.log('Not authenticated! isAuthenticated:', isAuthenticated, 'user:', user);
         setError('You must be logged in to create a listing');
-        router.push('/login');
+        setLoading(false);
         return;
       }
+
+      console.log('User authenticated:', user.email);
 
       // Get auth token
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       if (!token) {
+        console.log('No token in localStorage');
         setError('Authentication token not found. Please log in again.');
-        router.push('/login');
+        setLoading(false);
         return;
       }
 
@@ -86,6 +96,7 @@ export default function SellPage() {
       data.append('description', formData.description);
 
       // Add photos
+      console.log('Photos to upload:', formData.photos.length);
       formData.photos.forEach((photo) => {
         console.log('Adding photo:', photo.file.name);
         data.append('photos', photo.file);
@@ -124,13 +135,13 @@ export default function SellPage() {
         throw new Error('No listing ID returned from server');
       }
 
+      console.log('Success! Redirecting to listing:', listingId);
       // Success - redirect to listing
       router.push(`/listing?id=${listingId}`);
     } catch (err) {
       const errorMsg = (err as any).message || 'Error creating listing';
       console.error('Publish error:', errorMsg);
       setError(errorMsg);
-    } finally {
       setLoading(false);
     }
   };
