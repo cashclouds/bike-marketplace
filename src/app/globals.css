@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light Theme */
+.theme-light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+}
+
+/* Dark Theme */
+.theme-dark {
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border: #374151;
+  background: #111827;
+  color: #f9fafb;
+}
+
+/* Dark theme overrides */
+.theme-dark .bg-white { 
+  background: #1f2937 !important; 
+  color: #f9fafb !important;
+}
+
+.theme-dark .bg-gray-50 { 
+  background: #111827 !important; 
+}
+
+.theme-dark .bg-gray-100 { 
+  background: #374151 !important; 
+}
+
+.theme-dark .bg-gray-200 { 
+  background: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+.theme-dark .bg-blue-50 { 
+  background: #1e3a5f !important; 
+}
+
+.theme-dark .text-gray-900 { 
+  color: #f9fafb !important; 
+}
+
+.theme-dark .text-gray-700 { 
+  color: #d1d5db !important; 
+}
+
+.theme-dark .text-gray-600 { 
+  color: #9ca3af !important; 
+}
+
+.theme-dark .text-gray-500 { 
+  color: #6b7280 !important; 
+}
+
+.theme-dark .text-blue-900 { 
+  color: #93c5fd !important; 
+}
+
+.theme-dark .text-blue-800 { 
+  color: #bfdbfe !important; 
+}
+
+.theme-dark .border-gray-300 { 
+  border-color: #4b5563 !important; 
+}
+
+.theme-dark .border-gray-200 { 
+  border-color: #374151 !important; 
+}
+
+.theme-dark .border-blue-200 { 
+  border-color: #1e40af !important; 
+}
+
+.theme-dark .border { 
+  border-color: #4b5563 !important; 
+}
+
+/* Input, select, textarea - CRITICAL FIX */
+.theme-dark input,
+.theme-dark select,
+.theme-dark textarea {
+  background: #374151 !important;
+  color: #f9fafb !important;
+  border-color: #4b5563 !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.theme-dark input::placeholder,
+.theme-dark textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+.theme-dark input:focus,
+.theme-dark select:focus,
+.theme-dark textarea:focus {
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Select dropdown - CRITICAL FIX for browser-rendered options */
+.theme-dark select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+.theme-dark select option {
+  background: #374151 !important;
+  color: #f9fafb !important;
+}
+
+/* Number input arrows */
+.theme-dark input[type="number"]::-webkit-inner-spin-button,
+.theme-dark input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Color Schemes */
+.color-blue .bg-blue-600 { background: #2563eb !important; }
+.color-blue .text-blue-600 { color: #2563eb !important; }
+.color-blue .hover\:bg-blue-700:hover { background: #1d4ed8 !important; }
+.color-blue .border-blue-500 { border-color: #3b82f6 !important; }
+
+.color-green .bg-blue-600 { background: #059669 !important; }
+.color-green .text-blue-600 { color: #059669 !important; }
+.color-green .hover\:bg-blue-700:hover { background: #047857 !important; }
+.color-green .border-blue-500 { border-color: #10b981 !important; }
+
+.color-red .bg-blue-600 { background: #dc2626 !important; }
+.color-red .text-blue-600 { color: #dc2626 !important; }
+.color-red .hover\:bg-blue-700:hover { background: #b91c1c !important; }
+.color-red .border-blue-500 { border-color: #ef4444 !important; }
+
+.color-purple .bg-blue-600 { background: #7c3aed !important; }
+.color-purple .text-blue-600 { color: #7c3aed !important; }
+.color-purple .hover\:bg-blue-700:hover { background: #6d28d9 !important; }
+.color-purple .border-blue-500 { border-color: #8b5cf6 !important; }
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}

@@ -1,0 +1,235 @@
+{
+  "component_categories": [
+    {
+      "id": 1,
+      "name": "Groupset",
+      "subcategories": [
+        "Complete Groupset",
+        "Shifters",
+        "Derailleurs (Front/Rear)",
+        "Crankset",
+        "Bottom Bracket",
+        "Chain",
+        "Cassette"
+      ],
+      "major_brands": ["Shimano", "SRAM", "Campagnolo", "MicroShift"]
+    },
+    {
+      "id": 2,
+      "name": "Brakes",
+      "subcategories": [
+        "Disc Brakes (Hydraulic)",
+        "Disc Brakes (Mechanical)",
+        "Rim Brakes (V-brake)",
+        "Rim Brakes (Caliper)",
+        "Brake Rotors",
+        "Brake Pads"
+      ],
+      "major_brands": ["Shimano", "SRAM", "Magura", "Hope", "TRP"]
+    },
+    {
+      "id": 3,
+      "name": "Wheels",
+      "subcategories": [
+        "Complete Wheelsets",
+        "Front Wheel",
+        "Rear Wheel",
+        "Rims",
+        "Hubs",
+        "Spokes"
+      ],
+      "major_brands": ["Mavic", "DT Swiss", "Zipp", "Roval", "Fulcrum", "Stan's NoTubes"]
+    },
+    {
+      "id": 4,
+      "name": "Tires",
+      "subcategories": [
+        "Road Tires",
+        "Mountain Tires",
+        "Gravel Tires",
+        "Tubeless Tires",
+        "Inner Tubes",
+        "Tire Sealant"
+      ],
+      "major_brands": ["Continental", "Schwalbe", "Maxxis", "Michelin", "Vittoria", "Pirelli"]
+    },
+    {
+      "id": 5,
+      "name": "Fork",
+      "subcategories": [
+        "Suspension Fork",
+        "Rigid Fork",
+        "Carbon Fork",
+        "Gravel Fork"
+      ],
+      "major_brands": ["RockShox", "Fox", "Marzocchi", "SR Suntour", "Manitou"]
+    },
+    {
+      "id": 6,
+      "name": "Shock",
+      "subcategories": [
+        "Air Shock",
+        "Coil Shock"
+      ],
+      "major_brands": ["RockShox", "Fox", "DVO", "X-Fusion", "Cane Creek"]
+    },
+    {
+      "id": 7,
+      "name": "Handlebars & Stem",
+      "subcategories": [
+        "Road Handlebar (Drop)",
+        "MTB Handlebar (Flat)",
+        "Riser Handlebar",
+        "Aero Handlebar",
+        "Stem",
+        "Bar Tape/Grips"
+      ],
+      "major_brands": ["Ritchey", "Zipp", "Deda", "FSA", "Race Face", "Renthal"]
+    },
+    {
+      "id": 8,
+      "name": "Saddle & Seatpost",
+      "subcategories": [
+        "Road Saddle",
+        "MTB Saddle",
+        "Standard Seatpost",
+        "Dropper Seatpost"
+      ],
+      "major_brands": ["Selle Italia", "Fizik", "Brooks", "WTB", "Fox", "RockShox"]
+    },
+    {
+      "id": 9,
+      "name": "Pedals",
+      "subcategories": [
+        "Road Pedals (Clipless)",
+        "MTB Pedals (Clipless)",
+        "Flat Pedals",
+        "Hybrid Pedals"
+      ],
+      "major_brands": ["Shimano", "Look", "Time", "Speedplay", "Crankbrothers", "Race Face"]
+    },
+    {
+      "id": 10,
+      "name": "Frame",
+      "subcategories": [
+        "Road Frame",
+        "Mountain Frame",
+        "Gravel Frame",
+        "Track Frame"
+      ],
+      "major_brands": ["Open", "Santa Cruz", "Yeti", "Colnago", "Pinarello", "Cervelo"]
+    }
+  ],
+  "spare_parts": [
+    {
+      "category": "Drivetrain",
+      "parts": [
+        "Chain",
+        "Cassette",
+        "Chainring",
+        "Bottom Bracket",
+        "Chain Guide",
+        "Derailleur Hanger"
+      ]
+    },
+    {
+      "category": "Brake System",
+      "parts": [
+        "Brake Pads",
+        "Brake Rotors",
+        "Brake Cables",
+        "Hydraulic Brake Hose",
+        "Brake Fluid"
+      ]
+    },
+    {
+      "category": "Wheels & Tires",
+      "parts": [
+        "Inner Tubes",
+        "Tire",
+        "Rim Tape",
+        "Spokes",
+        "Nipples",
+        "Hub Bearings",
+        "Valve Stems"
+      ]
+    },
+    {
+      "category": "Cockpit",
+      "parts": [
+        "Bar Tape",
+        "Grips",
+        "Bar Ends",
+        "Headset",
+        "Stem Bolts",
+        "Handlebar Plugs"
+      ]
+    },
+    {
+      "category": "Suspension",
+      "parts": [
+        "Fork Seals",
+        "Shock Bushings",
+        "Suspension Oil",
+        "Air Valve",
+        "Dust Wipers"
+      ]
+    },
+    {
+      "category": "Fasteners & Small Parts",
+      "parts": [
+        "Bolts (various sizes)",
+        "Cable Housing",
+        "Shift Cables",
+        "Brake Cables",
+        "Cable Ends",
+        "Frame Protectors",
+        "Chainstay Protector"
+      ]
+    },
+    {
+      "category": "Accessories",
+      "parts": [
+        "Bottle Cage",
+        "Computer Mount",
+        "Bell",
+        "Kickstand",
+        "Fenders/Mudguards",
+        "Rack",
+        "Lights"
+      ]
+    }
+  ],
+  "groupset_tiers": {
+    "Shimano": [
+      {"name": "Dura-Ace", "level": "Pro", "speeds": "11/12"},
+      {"name": "Ultegra", "level": "High-End", "speeds": "11/12"},
+      {"name": "105", "level": "Mid-Range", "speeds": "11/12"},
+      {"name": "Tiagra", "level": "Entry-Sport", "speeds": "10"},
+      {"name": "Sora", "level": "Entry", "speeds": "9"},
+      {"name": "Claris", "level": "Entry", "speeds": "8"},
+      {"name": "Deore XT", "level": "High-End MTB", "speeds": "12"},
+      {"name": "Deore", "level": "Mid-Range MTB", "speeds": "10/11/12"},
+      {"name": "SLX", "level": "Mid-Range MTB", "speeds": "12"},
+      {"name": "Alivio", "level": "Entry MTB", "speeds": "9"},
+      {"name": "Altus", "level": "Entry MTB", "speeds": "9"}
+    ],
+    "SRAM": [
+      {"name": "Red eTap AXS", "level": "Pro", "speeds": "12"},
+      {"name": "Force eTap AXS", "level": "High-End", "speeds": "12"},
+      {"name": "Rival eTap AXS", "level": "Mid-Range", "speeds": "12"},
+      {"name": "Apex", "level": "Entry", "speeds": "11"},
+      {"name": "XX1 Eagle", "level": "Pro MTB", "speeds": "12"},
+      {"name": "X01 Eagle", "level": "High-End MTB", "speeds": "12"},
+      {"name": "GX Eagle", "level": "Mid-Range MTB", "speeds": "12"},
+      {"name": "NX Eagle", "level": "Entry-Sport MTB", "speeds": "11/12"},
+      {"name": "SX Eagle", "level": "Entry MTB", "speeds": "12"}
+    ],
+    "Campagnolo": [
+      {"name": "Super Record", "level": "Pro", "speeds": "12/13"},
+      {"name": "Record", "level": "High-End", "speeds": "12"},
+      {"name": "Chorus", "level": "Mid-Range", "speeds": "12"},
+      {"name": "Potenza", "level": "Entry-Sport", "speeds": "11"}
+    ]
+  }
+}

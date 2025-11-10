@@ -1,0 +1,546 @@
+{
+  "brands": [
+    {
+      "id": 1,
+      "name": "Trek",
+      "country": "USA",
+      "models": [
+        {
+          "id": 101,
+          "name": "Domane",
+          "type": "Road - Endurance",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1200-12500"
+        },
+        {
+          "id": 102,
+          "name": "Madone",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3000-15000"
+        },
+        {
+          "id": 103,
+          "name": "Marlin",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "500-1000"
+        },
+        {
+          "id": 104,
+          "name": "Fuel EX",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-8000"
+        },
+        {
+          "id": 105,
+          "name": "FX",
+          "type": "Hybrid - Fitness",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "600-1500"
+        },
+        {
+          "id": 106,
+          "name": "Checkpoint",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-6000"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Giant",
+      "country": "Taiwan",
+      "models": [
+        {
+          "id": 201,
+          "name": "TCR",
+          "type": "Road - Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1000-10000"
+        },
+        {
+          "id": 202,
+          "name": "Defy",
+          "type": "Road - Endurance",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "900-8000"
+        },
+        {
+          "id": 203,
+          "name": "Talon",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "600-1200"
+        },
+        {
+          "id": 204,
+          "name": "Trance",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-9000"
+        },
+        {
+          "id": 205,
+          "name": "Revolt",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1200-4500"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Specialized",
+      "country": "USA",
+      "models": [
+        {
+          "id": 301,
+          "name": "Tarmac",
+          "type": "Road - Race/Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2000-14000"
+        },
+        {
+          "id": 302,
+          "name": "Roubaix",
+          "type": "Road - Endurance",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-12000"
+        },
+        {
+          "id": 303,
+          "name": "Stumpjumper",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2800-13000"
+        },
+        {
+          "id": 304,
+          "name": "Rockhopper",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "650-1300"
+        },
+        {
+          "id": 305,
+          "name": "Crux",
+          "type": "Gravel/Cyclocross",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3000-12000"
+        },
+        {
+          "id": 306,
+          "name": "Diverge",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1400-8000"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Cannondale",
+      "country": "USA",
+      "models": [
+        {
+          "id": 401,
+          "name": "SuperSix EVO",
+          "type": "Road - Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2000-11000"
+        },
+        {
+          "id": 402,
+          "name": "SystemSix",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "4000-13000"
+        },
+        {
+          "id": 403,
+          "name": "Trail",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "600-1500"
+        },
+        {
+          "id": 404,
+          "name": "Scalpel",
+          "type": "Mountain - XC",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3500-10000"
+        },
+        {
+          "id": 405,
+          "name": "Topstone",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1300-5500"
+        },
+        {
+          "id": 406,
+          "name": "Quick",
+          "type": "Hybrid - Fitness",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "600-1700"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Scott",
+      "country": "Switzerland",
+      "models": [
+        {
+          "id": 501,
+          "name": "Addict",
+          "type": "Road - Climbing",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2000-12000"
+        },
+        {
+          "id": 502,
+          "name": "Foil",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3500-11000"
+        },
+        {
+          "id": 503,
+          "name": "Spark",
+          "type": "Mountain - XC",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-10000"
+        },
+        {
+          "id": 504,
+          "name": "Scale",
+          "type": "Mountain - XC Hardtail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-8000"
+        },
+        {
+          "id": 505,
+          "name": "Speedster",
+          "type": "Road - Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum"],
+          "typical_price_range": "1000-2500"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Merida",
+      "country": "Taiwan",
+      "models": [
+        {
+          "id": 601,
+          "name": "Scultura",
+          "type": "Road - Race/Climbing",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1200-9000"
+        },
+        {
+          "id": 602,
+          "name": "Reacto",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "2500-10000"
+        },
+        {
+          "id": 603,
+          "name": "Big.Nine",
+          "type": "Mountain - XC",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1000-7000"
+        },
+        {
+          "id": 604,
+          "name": "One-Sixty",
+          "type": "Mountain - Enduro",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-8000"
+        },
+        {
+          "id": 605,
+          "name": "Silex",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1300-5000"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Cube",
+      "country": "Germany",
+      "models": [
+        {
+          "id": 701,
+          "name": "Attain",
+          "type": "Road - Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "900-3000"
+        },
+        {
+          "id": 702,
+          "name": "Litening",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "2500-7000"
+        },
+        {
+          "id": 703,
+          "name": "Reaction",
+          "type": "Mountain - XC Hardtail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "700-3500"
+        },
+        {
+          "id": 704,
+          "name": "Stereo",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2000-7000"
+        },
+        {
+          "id": 705,
+          "name": "Nuroad",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1000-3500"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Canyon",
+      "country": "Germany",
+      "models": [
+        {
+          "id": 801,
+          "name": "Ultimate",
+          "type": "Road - Race/Climbing",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-9000"
+        },
+        {
+          "id": 802,
+          "name": "Aeroad",
+          "type": "Road - Aero",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3000-11000"
+        },
+        {
+          "id": 803,
+          "name": "Spectral",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2000-7000"
+        },
+        {
+          "id": 804,
+          "name": "Neuron",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-5000"
+        },
+        {
+          "id": 805,
+          "name": "Grail",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-5500"
+        },
+        {
+          "id": 806,
+          "name": "Endurace",
+          "type": "Road - Endurance",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-8000"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Orbea",
+      "country": "Spain",
+      "models": [
+        {
+          "id": 901,
+          "name": "Orca",
+          "type": "Road - Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1800-10000"
+        },
+        {
+          "id": 902,
+          "name": "Orca Aero",
+          "type": "Road - Aero",
+          "years": [2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "4000-12000"
+        },
+        {
+          "id": 903,
+          "name": "Alma",
+          "type": "Mountain - XC",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1500-7000"
+        },
+        {
+          "id": 904,
+          "name": "Occam",
+          "type": "Mountain - Trail",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "2500-8000"
+        },
+        {
+          "id": 905,
+          "name": "Terra",
+          "type": "Gravel",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Aluminum", "Carbon"],
+          "typical_price_range": "1400-6000"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Bianchi",
+      "country": "Italy",
+      "models": [
+        {
+          "id": 1001,
+          "name": "Oltre",
+          "type": "Road - Aero/Race",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "4000-13000"
+        },
+        {
+          "id": 1002,
+          "name": "Specialissima",
+          "type": "Road - Climbing",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3500-12000"
+        },
+        {
+          "id": 1003,
+          "name": "Infinito",
+          "type": "Road - Endurance",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "2500-8000"
+        },
+        {
+          "id": 1004,
+          "name": "Methanol",
+          "type": "Mountain - XC",
+          "years": [2020, 2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "3000-9000"
+        },
+        {
+          "id": 1005,
+          "name": "Arcadex",
+          "type": "Gravel",
+          "years": [2021, 2022, 2023, 2024, 2025],
+          "frame_materials": ["Carbon"],
+          "typical_price_range": "2500-7000"
+        }
+      ]
+    }
+  ],
+  "bike_types": [
+    "Road - Race",
+    "Road - Endurance",
+    "Road - Aero",
+    "Road - Climbing",
+    "Mountain - XC",
+    "Mountain - Trail",
+    "Mountain - Enduro",
+    "Mountain - Downhill",
+    "Mountain - XC Hardtail",
+    "Gravel",
+    "Gravel/Cyclocross",
+    "Hybrid - Fitness",
+    "Hybrid - Comfort",
+    "City/Urban",
+    "E-bike - Road",
+    "E-bike - Mountain",
+    "E-bike - City"
+  ],
+  "frame_materials": [
+    "Aluminum",
+    "Carbon",
+    "Steel",
+    "Titanium"
+  ],
+  "frame_sizes": [
+    "XS (48-50cm)",
+    "S (51-53cm)",
+    "M (54-56cm)",
+    "L (57-59cm)",
+    "XL (60-62cm)",
+    "XXL (63cm+)"
+  ],
+  "wheel_sizes": [
+    "26\"",
+    "27.5\"",
+    "29\"",
+    "700c",
+    "650b"
+  ]
+}

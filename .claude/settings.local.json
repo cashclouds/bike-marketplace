@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(curl:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)",
+      "Bash(npm run dev:*)",
+      "Bash(psql:*)",
+      "Bash(where:*)",
+      "Bash(npm install:*)",
+      "Bash(node db-setup.js:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(node:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(PORT=5000 npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(npx tsc:*)",
+      "Bash(nul)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git rm:*)",
+      "Bash(.gitignore)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
