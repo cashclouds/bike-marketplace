@@ -105,8 +105,7 @@ export const createListingSchema = z.object({
   location: z
     .string()
     .min(2, 'Местоположение должно быть минимум 2 символа')
-    .max(100, 'Местоположение не может быть больше 100 символов')
-    .optional(),
+    .max(100, 'Местоположение не может быть больше 100 символов'),
   type: z
     .enum(['road', 'mountain', 'hybrid', 'cruiser', 'bmx', 'electric'])
     .optional(),

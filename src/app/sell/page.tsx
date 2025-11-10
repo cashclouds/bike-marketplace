@@ -23,6 +23,7 @@ export default function SellPage() {
     year: '',
     price: '',
     description: '',
+    location: '',
     photos: [] as any[],
   });
 
@@ -57,13 +58,14 @@ export default function SellPage() {
     });
 
     // Validate form
-    if (!formData.brand || !formData.year || !formData.price || !formData.description) {
+    if (!formData.brand || !formData.year || !formData.price || !formData.description || !formData.location) {
       console.log('Form validation failed - missing required fields');
       console.log('Missing:', {
         brand: !formData.brand,
         year: !formData.year,
         price: !formData.price,
         description: !formData.description,
+        location: !formData.location,
       });
       setError(t('allFieldsRequired') || 'All fields are required');
       return;
@@ -107,6 +109,7 @@ export default function SellPage() {
       data.append('year', String(formData.year)); // Ensure year is string for Zod validation
       data.append('price', String(formData.price)); // Ensure price is string for Zod validation
       data.append('description', formData.description);
+      data.append('location', formData.location);
 
       // Add photos
       console.log('Photos to upload:', formData.photos.length);
@@ -272,6 +275,16 @@ export default function SellPage() {
                   className="w-full px-4 py-3 border rounded-lg"
                   placeholder={t('describeBike')}
                 ></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Location *</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Berlin, Germany"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg"
+                />
               </div>
               <div className="flex gap-4">
                 <button onClick={() => setStep(1)} className="flex-1 px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300">← {t('back')}</button>

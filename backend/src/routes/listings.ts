@@ -192,6 +192,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       year,
       price,
       description,
+      location,
     } = validatedData;
 
     // Get photo URLs from uploaded files
@@ -231,8 +232,8 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     // Use model if provided, otherwise use brand as model_name
     const result = await query(
       `INSERT INTO listings
-       (id, user_id, brand_id, model_name, type, year, condition, price, currency, description, photos, status, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW())
+       (id, user_id, brand_id, model_name, type, year, condition, price, currency, description, location, photos, status, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW(), NOW())
        RETURNING *`,
       [
         listingId,
@@ -245,6 +246,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
         price,
         'EUR',
         description,
+        location,
         JSON.stringify(photos),
         'active',
       ]
