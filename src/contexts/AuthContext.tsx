@@ -55,6 +55,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     try {
       const response = (await api.registerUser(email, password, name, userType, phone)) as any;
+
+      // Get token - server returns accessToken, not token
+      const token = response.token || response.accessToken;
+      if (token) {
+        api.setToken(token);
+      }
+
       setUser(response.user);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Registration failed';
@@ -69,12 +76,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('AuthContext.login called for:', email);
       const response = (await api.loginUser(email, password)) as any;
       console.log('Login response:', response);
-      console.log('Token from response:', response.token);
+
+      // Get token - server returns accessToken, not token
+      const token = response.token || response.accessToken;
+      console.log('Token from response:', token);
 
       // Make sure token is set in api client
-      if (response.token) {
+      if (token) {
         console.log('Setting token in API client');
-        api.setToken(response.token);
+        api.setToken(token);
       }
 
       setUser(response.user);
