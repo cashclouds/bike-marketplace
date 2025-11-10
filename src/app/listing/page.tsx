@@ -146,9 +146,19 @@ function ListingContent() {
         <div className="max-w-5xl mx-auto px-4">
           {/* Gallery */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="bg-gray-300 flex items-center justify-center h-96 text-6xl">
-              🚴
-            </div>
+            {listing.photos && (typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).length > 0 ? (
+              <div className="bg-gray-300 flex items-center justify-center h-96 overflow-hidden">
+                <img
+                  src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5001'}${(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[0].url}`}
+                  alt={listing.model_name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="bg-gray-300 flex items-center justify-center h-96 text-6xl">
+                🚴
+              </div>
+            )}
             {listing.photos && (
               <div className="flex gap-2 p-4 overflow-x-auto">
                 {(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).map((photo: any, idx: number) => (

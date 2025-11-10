@@ -224,29 +224,44 @@ export default function CatalogPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {listings.map((item: any) => (
-                  <Link
-                    key={item.id}
-                    href={`/listing?id=${item.id}`}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  >
-                    <div className="bg-gray-200 flex items-center justify-center h-48 text-6xl">🚴</div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg">
-                        {item.model_name}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        {item.year} • {item.condition}
-                      </p>
-                      <div className="flex justify-between items-center mt-3">
-                        <span className="text-2xl font-bold text-blue-600">
-                          €{item.price}
-                        </span>
-                        <span className="text-sm text-gray-500">{item.location}</span>
+                {listings.map((item: any) => {
+                  const photos = typeof item.photos === 'string' ? JSON.parse(item.photos) : item.photos || [];
+                  const firstPhoto = photos.length > 0 ? photos[0] : null;
+
+                  return (
+                    <Link
+                      key={item.id}
+                      href={`/listing?id=${item.id}`}
+                      className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    >
+                      {firstPhoto ? (
+                        <div className="relative bg-gray-200 h-48 overflow-hidden">
+                          <img
+                            src={firstPhoto.url}
+                            alt={item.model_name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-gray-200 flex items-center justify-center h-48 text-6xl">🚴</div>
+                      )}
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg">
+                          {item.model_name}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {item.year} • {item.condition}
+                        </p>
+                        <div className="flex justify-between items-center mt-3">
+                          <span className="text-2xl font-bold text-blue-600">
+                            €{item.price}
+                          </span>
+                          <span className="text-sm text-gray-500">{item.location}</span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </main>

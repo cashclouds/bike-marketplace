@@ -183,13 +183,23 @@ export default function MyListingsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredListings.map((listing) => (
+                  {filteredListings.map((listing) => {
+                    const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos || [];
+                    const firstPhoto = photos.length > 0 ? photos[0] : null;
+
+                    return (
                     <tr key={listing.id} className="border-b hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-lg">
-                            🚴
-                          </div>
+                          {firstPhoto ? (
+                            <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-lg overflow-hidden">
+                              <img src={firstPhoto.url} alt={listing.model_name} className="w-full h-full object-cover" />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-lg">
+                              🚴
+                            </div>
+                          )}
                           <div>
                             <p className="font-semibold text-gray-900">{listing.model_name}</p>
                             <p className="text-sm text-gray-600">{listing.type}</p>
@@ -249,7 +259,8 @@ export default function MyListingsPage() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  );
+                  })}
                 </tbody>
               </table>
             </div>
