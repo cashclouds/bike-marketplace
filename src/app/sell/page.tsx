@@ -48,10 +48,23 @@ export default function SellPage() {
 
   const handlePublish = async () => {
     console.log('handlePublish called! isAuthenticated:', isAuthenticated, 'user:', user?.email);
+    console.log('formData:', {
+      brand: formData.brand,
+      year: formData.year,
+      price: formData.price,
+      description: formData.description,
+      photosCount: formData.photos.length,
+    });
 
     // Validate form
     if (!formData.brand || !formData.year || !formData.price || !formData.description) {
       console.log('Form validation failed - missing required fields');
+      console.log('Missing:', {
+        brand: !formData.brand,
+        year: !formData.year,
+        price: !formData.price,
+        description: !formData.description,
+      });
       setError(t('allFieldsRequired') || 'All fields are required');
       return;
     }
