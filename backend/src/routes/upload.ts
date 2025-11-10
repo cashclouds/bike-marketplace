@@ -65,7 +65,7 @@ router.post('/upload-multiple', uploadLimiter, authMiddleware, upload.array('ima
       return;
     }
 
-    const urls = (req.files as Express.Multer.File[]).map((file) => ({
+    const urls = (req.files as any[]).map((file: any) => ({
       url: `/uploads/${file.filename}`,
       filename: file.filename,
     }));

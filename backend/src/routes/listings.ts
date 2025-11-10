@@ -189,7 +189,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     } = validatedData;
 
     // Get photo URLs from uploaded files
-    const photos = (req.files as Express.Multer.File[] || []).map((file) => ({
+    const photos = (req.files as any[] || []).map((file: any) => ({
       url: `/uploads/${file.filename}`,
       filename: file.filename,
       size: file.size,
