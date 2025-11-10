@@ -7,8 +7,8 @@ export interface AuthRequest extends Request {
     email: string;
     user_type: 'individual' | 'business';
   };
-  file?: Express.Multer.File;
-  files?: Express.Multer.File[] | { [fieldname: string]: Express.Multer.File[] };
+  file?: any;
+  files?: any;
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
