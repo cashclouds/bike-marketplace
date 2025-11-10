@@ -15,6 +15,8 @@ export default function SellPage() {
   const [error, setError] = useState('');
   const brands = ['Trek', 'Giant', 'Specialized', 'Cannondale', 'Scott', 'Merida', 'Cube', 'Canyon', 'Orbea', 'Bianchi'];
 
+  console.log('SellPage mounted. isAuthenticated:', isAuthenticated, 'user:', user?.email);
+
   // Form state
   const [formData, setFormData] = useState({
     brand: '',
@@ -265,7 +267,10 @@ export default function SellPage() {
               <div className="flex gap-4">
                 <button onClick={() => setStep(2)} className="flex-1 px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300">← {t('back')}</button>
                 <button
-                  onClick={handlePublish}
+                  onClick={() => {
+                    console.log('Publish button clicked!');
+                    handlePublish();
+                  }}
                   disabled={loading}
                   className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
