@@ -213,6 +213,21 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     const listingId = uuidv4();
     console.log('Inserting listing:', { listingId, userId: req.user?.id, brand, model, year, price });
 
+    // Get a valid brand_id from the database, or use a NULL if not found
+    let brandIdResult = null;
+    try {
+      const brandResult = await query(
+        'SELECT id FROM brands WHERE name = $1 LIMIT 1',
+        [brand]
+      );
+      if (brandResult.rows.length > 0) {
+        brandIdResult = brandResult.rows[0].id;
+      }
+      console.log('Found brand ID:', brandIdResult);
+    } catch (e) {
+      console.log('Could not find brand:', brand);
+    }
+
     // Use model if provided, otherwise use brand as model_name
     const result = await query(
       `INSERT INTO listings
@@ -222,7 +237,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       [
         listingId,
         req.user?.id,
-        1, // Default brand_id for now
+        brandIdResult, // Use actual brand ID from database or NULL
         model || brand, // Use model if provided, otherwise fallback to brand
         'road', // Default type
         year || null,
