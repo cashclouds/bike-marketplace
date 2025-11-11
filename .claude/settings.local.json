@@ -28,7 +28,13 @@
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
       "Bash(git push:*)",
-      "Bash(PGPASSWORD=\"NmWiG0hKb1OqUoRoUXHKlKAuH0CJqbjV\" psql:*)"
+      "Bash(PGPASSWORD=\"NmWiG0hKb1OqUoRoUXHKlKAuH0CJqbjV\" psql:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(kill:*)",
+      "Bash(timeout 30 git push:*)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

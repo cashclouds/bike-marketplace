@@ -24,6 +24,11 @@ interface EnvConfig {
   maxFileSize: number;
   uploadDir: string;
 
+  // Cloudinary
+  cloudinaryCloudName?: string;
+  cloudinaryApiKey?: string;
+  cloudinaryApiSecret?: string;
+
   // Rate Limiting
   rateLimitWindowMs: number;
   rateLimitMaxRequests: number;
@@ -119,6 +124,11 @@ function validateEnv(): EnvConfig {
     // File Upload
     maxFileSize,
     uploadDir: process.env.UPLOAD_DIR || 'public/uploads',
+
+    // Cloudinary
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
 
     // Rate Limiting
     rateLimitWindowMs: parseInt(

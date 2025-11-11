@@ -13,6 +13,8 @@ import {
   formatValidationErrors,
 } from '../config/validation';
 import { authMiddleware, optionalAuth, AuthRequest } from '../middleware/auth';
+import { uploadToCloudinary, deleteFromCloudinary } from '../config/cloudinary';
+import { env } from '../config/env';
 
 const router: Router = express.Router();
 
@@ -195,16 +197,38 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       location,
     } = validatedData;
 
-    // Get photo URLs from uploaded files
-    const photos = (req.files as any[] || []).map((file: any) => ({
-      url: `/uploads/${file.filename}`,
-      filename: file.filename,
-      size: file.size,
-    }));
+    // Upload photos to Cloudinary or use local if not configured
+    const uploadedPhotos = [];
 
-    console.log('Photos processed:', photos.length);
+    if (env.cloudinaryCloudName) {
+      // Upload to Cloudinary
+      for (const file of (req.files as any[] || [])) {
+        try {
+          const url = await uploadToCloudinary(file.buffer, file.originalname);
+          uploadedPhotos.push({
+            url,
+            filename: file.originalname,
+            size: file.size,
+          });
+        } catch (error) {
+          logger.error('Cloudinary upload error:', error as Error);
+          throw new Error(`Failed to upload photo: ${file.originalname}`);
+        }
+      }
+    } else {
+      // Fallback to local storage
+      uploadedPhotos.push(
+        ...(req.files as any[] || []).map((file: any) => ({
+          url: `/uploads/${file.filename}`,
+          filename: file.filename,
+          size: file.size,
+        }))
+      );
+    }
 
-    if (photos.length === 0) {
+    console.log('Photos processed:', uploadedPhotos.length);
+
+    if (uploadedPhotos.length === 0) {
       res.status(400).json({
         error: 'At least one photo is required',
       });
@@ -247,7 +271,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
         'EUR',
         description,
         location,
-        JSON.stringify(photos),
+        JSON.stringify(uploadedPhotos),
         'active',
       ]
     );
