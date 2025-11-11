@@ -192,11 +192,23 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     // Upload photos to Cloudinary or use local if not configured
     const uploadedPhotos = [];
 
-    if (env.cloudinaryCloudName) {
+    console.log('Cloudinary config:', {
+      hasCloudName: !!env.cloudinaryCloudName,
+      hasApiKey: !!env.cloudinaryApiKey,
+      hasApiSecret: !!env.cloudinaryApiSecret,
+    });
+
+    if (env.cloudinaryCloudName && env.cloudinaryApiKey && env.cloudinaryApiSecret) {
       // Upload to Cloudinary
       for (const file of (req.files as any[] || [])) {
         try {
+          console.log('Uploading to Cloudinary:', {
+            filename: file.originalname,
+            hasBuffer: !!file.buffer,
+            bufferSize: file.buffer ? file.buffer.length : 0,
+          });
           const url = await uploadToCloudinary(file.buffer, file.originalname);
+          console.log('Cloudinary upload success:', url);
           uploadedPhotos.push({
             url,
             filename: file.originalname,
@@ -204,11 +216,18 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
           });
         } catch (error) {
           logger.error('Cloudinary upload error:', error as Error);
-          throw new Error(`Failed to upload photo: ${file.originalname}`);
+          console.log('Falling back to local storage for:', file.originalname);
+          // Fallback to local storage on error
+          uploadedPhotos.push({
+            url: `/uploads/${file.filename || file.originalname}`,
+            filename: file.filename || file.originalname,
+            size: file.size,
+          });
         }
       }
     } else {
-      // Fallback to local storage
+      // Fallback to local storage if no Cloudinary config
+      console.log('No Cloudinary config, using local storage');
       uploadedPhotos.push(
         ...(req.files as any[] || []).map((file: any) => ({
           url: `/uploads/${file.filename}`,
