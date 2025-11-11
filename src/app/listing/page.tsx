@@ -19,6 +19,19 @@ function ListingContent() {
   const [showContactForm, setShowContactForm] = useState(false);
   const [lang, setLang] = useState('en');
 
+  // Get the base URL for images
+  const getImageUrl = (photoUrl: string): string => {
+    // If it's already an absolute URL (from Cloudinary), return as-is
+    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+      return photoUrl;
+    }
+
+    // For relative URLs, construct the full backend URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+    const baseUrl = apiUrl.replace('/api', '');
+    return `${baseUrl}${photoUrl}`;
+  };
+
   // Load language
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
@@ -149,7 +162,7 @@ function ListingContent() {
             {listing.photos && (typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).length > 0 ? (
               <div className="bg-gray-300 flex items-center justify-center h-96 overflow-hidden">
                 <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5001'}${(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[0].url}`}
+                  src={getImageUrl((typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[0].url)}
                   alt={listing.model_name}
                   className="w-full h-full object-cover"
                 />
@@ -164,7 +177,7 @@ function ListingContent() {
                 {(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).map((photo: any, idx: number) => (
                   <div key={idx} className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg cursor-pointer hover:opacity-75 flex items-center justify-center text-3xl">
                     {photo.url ? (
-                      <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5001'}${photo.url}`} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(photo.url)} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
                     ) : (
                       '🖼️'
                     )}
