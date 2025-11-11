@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
+import { getImageUrl } from '@/lib/imageUrl';
 import Settings, { translations } from '@/components/Settings';
 
 export default function MyListingsPage() {
@@ -193,7 +194,7 @@ export default function MyListingsPage() {
                         <div className="flex items-center gap-4">
                           {firstPhoto ? (
                             <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-lg overflow-hidden">
-                              <img src={firstPhoto.url} alt={listing.model_name} className="w-full h-full object-cover" />
+                              <img src={getImageUrl(firstPhoto.url)} alt={listing.model_name} className="w-full h-full object-cover" />
                             </div>
                           ) : (
                             <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-lg">
