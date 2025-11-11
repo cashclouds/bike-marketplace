@@ -24,6 +24,19 @@ export default function CatalogPage() {
     search: '',
   });
 
+  // Get the base URL for images
+  const getImageUrl = (photoUrl: string): string => {
+    // If it's already an absolute URL (from Cloudinary), return as-is
+    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+      return photoUrl;
+    }
+
+    // For relative URLs, construct the full backend URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+    const baseUrl = apiUrl.replace('/api', '');
+    return `${baseUrl}${photoUrl}`;
+  };
+
   // Load language
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
@@ -259,7 +272,7 @@ export default function CatalogPage() {
                       {firstPhoto ? (
                         <div className="relative bg-gray-200 h-48 overflow-hidden">
                           <img
-                            src={firstPhoto.url}
+                            src={getImageUrl(firstPhoto.url)}
                             alt={item.model_name}
                             className="w-full h-full object-cover"
                           />
