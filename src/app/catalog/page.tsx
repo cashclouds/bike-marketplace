@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Settings, { translations } from '@/components/Settings';
 import { api } from '@/lib/api';
+import { getImageUrl } from '@/lib/imageUrl';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function CatalogPage() {
@@ -23,19 +24,6 @@ export default function CatalogPage() {
     location: '',
     search: '',
   });
-
-  // Get the base URL for images
-  const getImageUrl = (photoUrl: string): string => {
-    // If it's already an absolute URL (from Cloudinary), return as-is
-    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-      return photoUrl;
-    }
-
-    // For relative URLs, construct the full backend URL
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-    const baseUrl = apiUrl.replace('/api', '');
-    return `${baseUrl}${photoUrl}`;
-  };
 
   // Load language
   useEffect(() => {

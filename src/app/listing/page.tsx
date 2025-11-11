@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import { getImageUrl } from '@/lib/imageUrl';
 import { useAuth } from '@/contexts/AuthContext';
 import Settings from '@/components/Settings';
 import { translations } from '@/components/Settings';
@@ -18,19 +19,6 @@ function ListingContent() {
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [lang, setLang] = useState('en');
-
-  // Get the base URL for images
-  const getImageUrl = (photoUrl: string): string => {
-    // If it's already an absolute URL (from Cloudinary), return as-is
-    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-      return photoUrl;
-    }
-
-    // For relative URLs, construct the full backend URL
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-    const baseUrl = apiUrl.replace('/api', '');
-    return `${baseUrl}${photoUrl}`;
-  };
 
   // Load language
   useEffect(() => {
