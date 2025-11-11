@@ -242,7 +242,7 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
         model || brand, // Use model if provided, otherwise fallback to brand
         'road', // Default type
         year || null,
-        'excellent', // Default condition
+        'used', // Default condition
         price,
         'EUR',
         description,
