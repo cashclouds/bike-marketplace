@@ -8,9 +8,13 @@ import { env } from './env';
 
 // Parse allowed origins from environment or use frontend URL
 const getAllowedOrigins = (): string[] => {
-  // In production, only allow the frontend URL
+  // In production, allow frontend URL and known Vercel domains
   if (env.nodeEnv === 'production') {
-    return [env.frontendUrl];
+    return [
+      env.frontendUrl,
+      'https://bike-marketplace-rho.vercel.app',
+      'https://bike-marketplace.vercel.app',
+    ];
   }
 
   // In development, allow multiple origins for flexibility
@@ -38,13 +42,9 @@ export const corsOptions: CorsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      // In production, log but don't reject to help debug
-      if (env.nodeEnv === 'production') {
-        console.warn(`CORS: Request from ${origin} is not in allowed list, but allowing anyway`);
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS policy: ${origin} is not allowed`));
-      }
+      console.warn(`CORS: Rejected request from origin: ${origin}`);
+      console.warn(`CORS: Allowed origins: ${allowedOrigins.join(', ')}`);
+      callback(new Error(`CORS policy: ${origin} is not allowed`));
     }
   },
 
