@@ -120,15 +120,15 @@ export default function FavoritesPage() {
       <main className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-6xl mx-auto px-4">
           {/* Page Header */}
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">❤️ Your Favorites</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">{t('yourFavorites')}</h1>
 
           {loading ? (
-            <div className="text-center py-12 text-gray-600">Loading...</div>
+            <div className="text-center py-12 text-gray-600">{t('loading')}</div>
           ) : favorites.length === 0 ? (
             <div className="bg-white rounded-lg shadow-md p-12 text-center">
-              <p className="text-gray-600 mb-4 text-lg">You haven't favorited any listings yet</p>
+              <p className="text-gray-600 mb-4 text-lg">{t('noFavoritedYet')}</p>
               <Link href="/catalog" className="text-blue-600 hover:underline font-semibold">
-                Browse listings
+                {t('browseListing')}
               </Link>
             </div>
           ) : (
@@ -172,13 +172,13 @@ export default function FavoritesPage() {
                         href={`/listing?id=${listing.id}`}
                         className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-center transition-colors"
                       >
-                        View Details
+                        {t('viewDetails')}
                       </Link>
                       <button
                         onClick={() => handleRemove(listing.id)}
                         className="flex-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2 px-4 rounded-lg transition-colors"
                       >
-                        Remove
+                        {t('remove')}
                       </button>
                     </div>
                   </div>
@@ -191,10 +191,10 @@ export default function FavoritesPage() {
             <div className="mt-12 bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">You have {favorites.length} favorited listing{favorites.length !== 1 ? 's' : ''}</h2>
               <p className="text-gray-600 mb-4">
-                Manage your favorites and get notified when prices change or new similar listings are added.
+                {t('manageHelp')}
               </p>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
-                🔔 Enable Notifications
+                {t('enableNotif')}
               </button>
             </div>
           )}

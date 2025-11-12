@@ -75,7 +75,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-50 py-12">
-        <div className="text-center text-gray-600">Loading...</div>
+        <div className="text-center text-gray-600">{t('loading')}</div>
       </main>
     );
   }
@@ -142,15 +142,15 @@ export default function ProfilePage() {
               <div className="grid grid-cols-3 gap-4 pt-6 border-t">
                 <div className="text-center">
                   <p className="text-3xl font-bold text-blue-600">42</p>
-                  <p className="text-gray-600">Active Listings</p>
+                  <p className="text-gray-600">{t('activeListing')}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-3xl font-bold text-green-600">4.8★</p>
-                  <p className="text-gray-600">Rating</p>
+                  <p className="text-gray-600">{t('rating')}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-3xl font-bold text-purple-600">€12,450</p>
-                  <p className="text-gray-600">Total Sales</p>
+                  <p className="text-gray-600">{t('totalSales')}</p>
                 </div>
               </div>
             )}

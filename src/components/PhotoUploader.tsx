@@ -35,18 +35,35 @@ export default function PhotoUploader({ photos: externalPhotos, setPhotos: exter
       dragToReorder: 'Drag photos to reorder',
       clickToUpload: 'Click to upload or drag & drop',
       fileFormat: 'JPG or PNG, max 5MB per photo',
+      remove: 'Remove',
     },
     et: {
       uploadedPhotos: 'Üles laaditud fotod',
       dragToReorder: 'Lohista fotosid ümber järjestamiseks',
       clickToUpload: 'Klõpsa üleslaadimiseks või lohista',
       fileFormat: 'JPG või PNG, max 5MB foto kohta',
+      remove: 'Eemalda',
     },
     ru: {
       uploadedPhotos: 'Загруженные фото',
       dragToReorder: 'Перетащите фото для изменения порядка',
       clickToUpload: 'Нажмите для загрузки или перетащите',
       fileFormat: 'JPG или PNG, макс 5МБ на фото',
+      remove: 'Удалить',
+    },
+    lv: {
+      uploadedPhotos: 'Augšupielādētie fotoattēli',
+      dragToReorder: 'Velciet fotoattēlus, lai pārkārtotu',
+      clickToUpload: 'Noklikšķiniet, lai augšupielādētu, vai velciet',
+      fileFormat: 'JPG vai PNG, maks. 5MB vienam foto',
+      remove: 'Noņemt',
+    },
+    lt: {
+      uploadedPhotos: 'Įkeltos nuotraukos',
+      dragToReorder: 'Vilkite nuotraukas, kad pakeistumėte eilės tvarką',
+      clickToUpload: 'Spustelėkite įkėlimui arba vilkite',
+      fileFormat: 'JPG arba PNG, maks. 5MB vienai nuotraukai',
+      remove: 'Pašalinti',
     },
   };
 
@@ -142,7 +159,7 @@ export default function PhotoUploader({ photos: externalPhotos, setPhotos: exter
                 <button
                   onClick={() => removePhoto(photo.id)}
                   className="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold"
-                  title="Remove"
+                  title={t('remove')}
                 >
                   ×
                 </button>

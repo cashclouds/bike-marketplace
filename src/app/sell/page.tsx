@@ -84,7 +84,7 @@ export default function SellPage() {
       // Check authentication - don't redirect, just show error
       if (!isAuthenticated || !user) {
         console.log('Not authenticated! isAuthenticated:', isAuthenticated, 'user:', user);
-        setError('You must be logged in to create a listing');
+        setError(t('authenticateError'));
         setLoading(false);
         return;
       }
@@ -95,7 +95,7 @@ export default function SellPage() {
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       if (!token) {
         console.log('No token in localStorage');
-        setError('Authentication token not found. Please log in again.');
+        setError(t('tokenNotFound'));
         setLoading(false);
         return;
       }
@@ -280,7 +280,7 @@ export default function SellPage() {
                 <label className="block text-sm font-medium mb-2">Location *</label>
                 <input
                   type="text"
-                  placeholder="e.g., Berlin, Germany"
+                  placeholder={t('locationExample')}
                   value={formData.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
                   className="w-full px-4 py-3 border rounded-lg"
@@ -298,10 +298,10 @@ export default function SellPage() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h4 className="font-medium text-blue-900 mb-2">📸 {t('photoRequirements')}</h4>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>✓ {t('minimum6Photos') || 'Minimum 6 photos'}</li>
-                  <li>✓ {t('fullBikeLeft') || 'Full bike from left side'}</li>
-                  <li>✓ {t('fullBikeRight') || 'Full bike from right side'}</li>
-                  <li>✓ {t('dragToReorder') || 'Drag to reorder'}</li>
+                  <li>✓ {t('minPhotos')}</li>
+                  <li>✓ {t('leftSide')}</li>
+                  <li>✓ {t('rightSide')}</li>
+                  <li>✓ {t('dragToReorder')}</li>
                 </ul>
               </div>
 
@@ -317,7 +317,7 @@ export default function SellPage() {
                   disabled={loading}
                   className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Publishing...' : `✓ ${t('publish')}`}
+                  {loading ? t('publishingListing') : `✓ ${t('publish')}`}
                 </button>
               </div>
             </div>

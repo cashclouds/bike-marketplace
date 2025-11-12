@@ -188,7 +188,7 @@ export default function CatalogPage() {
                   value={filters.type}
                   onChange={(e) => handleFilterChange('type', e.target.value)}
                 >
-                  <option value="">All Types</option>
+                  <option value="">{t('allTypes')}</option>
                   <option value="Road Bike">Road Bike</option>
                   <option value="Mountain Bike">Mountain Bike</option>
                   <option value="Gravel Bike">Gravel Bike</option>
@@ -204,14 +204,14 @@ export default function CatalogPage() {
                 <div className="flex gap-2">
                   <input
                     type="number"
-                    placeholder="Min"
+                    placeholder={t('min')}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     value={filters.minPrice}
                     onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                   />
                   <input
                     type="number"
-                    placeholder="Max"
+                    placeholder={t('max')}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     value={filters.maxPrice}
                     onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
@@ -225,14 +225,14 @@ export default function CatalogPage() {
                 <div className="flex gap-2">
                   <input
                     type="number"
-                    placeholder="From"
+                    placeholder={t('from')}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     value={filters.minYear}
                     onChange={(e) => handleFilterChange('minYear', e.target.value)}
                   />
                   <input
                     type="number"
-                    placeholder="To"
+                    placeholder={t('to')}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     value={filters.maxYear}
                     onChange={(e) => handleFilterChange('maxYear', e.target.value)}
@@ -248,11 +248,11 @@ export default function CatalogPage() {
                   value={filters.material}
                   onChange={(e) => handleFilterChange('material', e.target.value)}
                 >
-                  <option value="">All Materials</option>
-                  <option value="Aluminum">Aluminum</option>
-                  <option value="Carbon">Carbon Fiber</option>
-                  <option value="Steel">Steel</option>
-                  <option value="Titanium">Titanium</option>
+                  <option value="">{t('allMaterials')}</option>
+                  <option value="Aluminum">{t('aluminum')}</option>
+                  <option value="Carbon">{t('carbonFiber')}</option>
+                  <option value="Steel">{t('steel')}</option>
+                  <option value="Titanium">{t('titanium')}</option>
                 </select>
               </div>
 
@@ -264,7 +264,7 @@ export default function CatalogPage() {
                   value={filters.wheelSize}
                   onChange={(e) => handleFilterChange('wheelSize', e.target.value)}
                 >
-                  <option value="">All Sizes</option>
+                  <option value="">{t('allSizes')}</option>
                   <option value="20">20"</option>
                   <option value="24">24"</option>
                   <option value="26">26"</option>
@@ -282,13 +282,13 @@ export default function CatalogPage() {
                   value={filters.frameSize}
                   onChange={(e) => handleFilterChange('frameSize', e.target.value)}
                 >
-                  <option value="">All Sizes</option>
-                  <option value="XS">XS (Extra Small)</option>
-                  <option value="S">S (Small)</option>
-                  <option value="M">M (Medium)</option>
-                  <option value="L">L (Large)</option>
-                  <option value="XL">XL (Extra Large)</option>
-                  <option value="XXL">XXL (2XL)</option>
+                  <option value="">{t('allFrameSizes')}</option>
+                  <option value="XS">{t('xsSmall')}</option>
+                  <option value="S">{t('sSmall')}</option>
+                  <option value="M">{t('mMedium')}</option>
+                  <option value="L">{t('lLarge')}</option>
+                  <option value="XL">{t('xlExtraLarge')}</option>
+                  <option value="XXL">{t('xxl2xl')}</option>
                 </select>
               </div>
 
@@ -301,10 +301,10 @@ export default function CatalogPage() {
                   onChange={(e) => handleFilterChange('condition', e.target.value)}
                 >
                   <option value="">{t('allConditions') || 'All Conditions'}</option>
-                  <option value="new">New</option>
-                  <option value="like-new">Like New</option>
-                  <option value="used">Used</option>
-                  <option value="damaged">Damaged</option>
+                  <option value="new">{t('new')}</option>
+                  <option value="like-new">{t('like_new')}</option>
+                  <option value="used">{t('used')}</option>
+                  <option value="damaged">{t('damaged')}</option>
                 </select>
               </div>
 
@@ -313,7 +313,7 @@ export default function CatalogPage() {
                 <label className="block text-sm font-medium mb-2">{t('location') || 'Location'}</label>
                 <input
                   type="text"
-                  placeholder="City..."
+                  placeholder={t('locationExample')}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={filters.location}
                   onChange={(e) => handleFilterChange('location', e.target.value)}
@@ -377,7 +377,7 @@ export default function CatalogPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  🚴 Road Bikes
+                  🚴 {t('roadBikes')}
                 </button>
                 <button
                   onClick={() => handleFilterChange('type', 'Mountain Bike')}
@@ -387,7 +387,7 @@ export default function CatalogPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  ⛰️ Mountain Bikes
+                  ⛰️ {t('mountainBikes')}
                 </button>
                 <button
                   onClick={() => handleFilterChange('condition', 'new')}
@@ -397,13 +397,13 @@ export default function CatalogPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  ✨ New
+                  {t('newListings')}
                 </button>
                 <button
                   onClick={() => handleClearFilters()}
                   className="px-4 py-2 rounded-lg font-medium transition-colors text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300"
                 >
-                  ↺ All Bikes
+                  {t('allBikes')}
                 </button>
               </div>
             </div>
@@ -416,11 +416,11 @@ export default function CatalogPage() {
 
             {loading ? (
               <div className="text-center py-12">
-                <p className="text-gray-500">Loading listings...</p>
+                <p className="text-gray-500">{t('loading')}</p>
               </div>
             ) : listings.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-500">No listings found. Try adjusting your filters.</p>
+                <p className="text-gray-500">{t('noListingsFound')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

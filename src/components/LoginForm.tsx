@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { translations } from '@/components/Settings';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -13,10 +14,30 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lang, setLang] = useState('en');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLang = localStorage.getItem('lang') || 'en';
+      setLang(savedLang);
+    }
+
+    const handleLanguageChange = () => {
+      if (typeof window !== 'undefined') {
+        const savedLang = localStorage.getItem('lang') || 'en';
+        setLang(savedLang);
+      }
+    };
+
+    window.addEventListener('languageChange', handleLanguageChange);
+    return () => window.removeEventListener('languageChange', handleLanguageChange);
+  }, []);
+
+  const t = (key: string) => (translations as any)[lang as keyof typeof translations][key as any] || key;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,7 +52,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     setError(null);
 
     if (!formData.email || !formData.password) {
-      setError('Email and password are required');
+      setError(t('emailRequired'));
       return;
     }
 
@@ -54,7 +75,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">{t('loginYourAccount')}</h2>
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -63,13 +84,13 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">Email Address</label>
+        <label className="block text-sm font-medium mb-1">{t('emailAddress')}</label>
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="you@example.com"
+          placeholder={t('emailExample')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
@@ -77,9 +98,9 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
       <div>
         <div className="flex justify-between items-center mb-1">
-          <label className="block text-sm font-medium">Password</label>
+          <label className="block text-sm font-medium">{t('password')}</label>
           <a href="/forgot-password" className="text-xs text-blue-600 hover:underline">
-            Forgot?
+            {t('forgot')}
           </a>
         </div>
         <input
@@ -87,7 +108,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder="••••••••"
+          placeholder={t('passwordDots')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
@@ -98,13 +119,13 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         disabled={loading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition-colors"
       >
-        {loading ? 'Logging in...' : 'Login'}
+        {loading ? t('loggingIn') : t('login')}
       </button>
 
       <p className="text-center text-sm text-gray-600">
-        Don't have an account?{' '}
+        {t('dontAccount')}{' '}
         <a href="/register" className="text-blue-600 hover:underline">
-          Register here
+          {t('registerHere')}
         </a>
       </p>
     </form>

@@ -59,7 +59,7 @@ export default function MyListingsPage() {
   }, [isAuthenticated, router]);
 
   const handleDelete = (listingId: string) => {
-    if (window.confirm('Are you sure you want to delete this listing?')) {
+    if (window.confirm(t('deleteConfirm'))) {
       setListings((prev) => prev.filter((l) => l.id !== listingId));
       // Call API to delete
       api.deleteListing(listingId);
@@ -113,12 +113,12 @@ export default function MyListingsPage() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Page Header */}
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">My Listings</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{t('myListings')}</h1>
             <Link
               href="/sell"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg"
             >
-              + Create New Listing
+              + {t('createNewListing')}
             </Link>
           </div>
 
@@ -126,15 +126,15 @@ export default function MyListingsPage() {
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-3xl font-bold text-blue-600">{listings.filter((l) => l.status === 'active').length}</p>
-              <p className="text-gray-600">Active Listings</p>
+              <p className="text-gray-600">{t('activeListing')}</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-3xl font-bold text-green-600">{listings.filter((l) => l.status === 'sold').length}</p>
-              <p className="text-gray-600">Sold</p>
+              <p className="text-gray-600">{t('sold')}</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <p className="text-3xl font-bold text-purple-600">€12,450</p>
-              <p className="text-gray-600">Total Sales</p>
+              <p className="text-gray-600">{t('totalSales')}</p>
             </div>
           </div>
 
@@ -159,15 +159,15 @@ export default function MyListingsPage() {
 
           {/* Listings Table */}
           {loading ? (
-            <div className="text-center py-12 text-gray-600">Loading listings...</div>
+            <div className="text-center py-12 text-gray-600">{t('loading')}</div>
           ) : filteredListings.length === 0 ? (
             <div className="bg-white rounded-lg shadow-md p-12 text-center">
-              <p className="text-gray-600 mb-4">No {filter} listings</p>
+              <p className="text-gray-600 mb-4">{t('noListings')}</p>
               <Link
                 href="/sell"
                 className="text-blue-600 hover:underline font-semibold"
               >
-                Create your first listing
+                {t('createNewListing')}
               </Link>
             </div>
           ) : (
@@ -175,12 +175,12 @@ export default function MyListingsPage() {
               <table className="w-full">
                 <thead className="bg-gray-100 border-b">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Listing</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Price</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Views</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Posted</th>
-                    <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">Actions</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">{t('listingTable')}</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">{t('price')}</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">{t('status')}</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">{t('views')}</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">{t('posted')}</th>
+                    <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -224,7 +224,7 @@ export default function MyListingsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-gray-600">
-                        {listing.views || 0} views
+                        {listing.views || 0} {t('views')}
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {new Date(listing.created_at).toLocaleDateString()}
@@ -235,27 +235,27 @@ export default function MyListingsPage() {
                             href={`/listing?id=${listing.id}`}
                             className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
                           >
-                            View
+                            {t('view')}
                           </Link>
                           <Link
                             href={`/edit-listing?id=${listing.id}`}
                             className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
                           >
-                            Edit
+                            {t('edit')}
                           </Link>
                           {listing.status === 'active' && (
                             <button
                               onClick={() => handleMarkSold(listing.id)}
                               className="text-green-600 hover:text-green-700 font-semibold text-sm"
                             >
-                              Mark Sold
+                              {t('markSold')}
                             </button>
                           )}
                           <button
                             onClick={() => handleDelete(listing.id)}
                             className="text-red-600 hover:text-red-700 font-semibold text-sm"
                           >
-                            Delete
+                            {t('delete')}
                           </button>
                         </div>
                       </td>

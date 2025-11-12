@@ -396,14 +396,14 @@ export default function Home() {
           </div>
         </div>
         <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-          <p>© 2024 BikeMarket. All rights reserved.</p>
+          <p>{t('copyrightText')}</p>
         </div>
       </footer>
 
       {/* Advertisement Space */}
       <div className="bg-yellow-100 dark:bg-yellow-900 border-t-2 border-yellow-400 py-2 px-4 text-center text-sm">
-        📢 Advertisement Space - This area is reserved for ads
-        <span className="ml-4 text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">[Hide for logged-in users]</span>
+        {t('adSpace')}
+        <span className="ml-4 text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">{t('hideAdUsers')}</span>
       </div>
     </div>
   );
