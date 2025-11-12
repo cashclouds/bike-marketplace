@@ -19,10 +19,14 @@ export default function CatalogPage() {
     minPrice: '',
     maxPrice: '',
     year: '',
+    minYear: '',
+    maxYear: '',
     material: '',
     condition: '',
     location: '',
     search: '',
+    wheelSize: '',
+    frameSize: '',
   });
 
   // Load language
@@ -89,10 +93,14 @@ export default function CatalogPage() {
       minPrice: '',
       maxPrice: '',
       year: '',
+      minYear: '',
+      maxYear: '',
       material: '',
       condition: '',
       location: '',
       search: '',
+      wheelSize: '',
+      frameSize: '',
     });
   };
 
@@ -127,17 +135,18 @@ export default function CatalogPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
           <aside className="w-64">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-              <h2 className="text-lg font-bold mb-4">{t('filters')}</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24 max-h-[calc(100vh-150px)] overflow-y-auto">
+              <h2 className="text-lg font-bold mb-6">{t('filters') || 'Filters'}</h2>
 
+              {/* Brand Filter */}
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">{t('brand')}</label>
+                <label className="block text-sm font-medium mb-2">{t('brand') || 'Brand'}</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={filters.brand_id}
                   onChange={(e) => handleFilterChange('brand_id', e.target.value)}
                 >
-                  <option value="">{t('allBrands')}</option>
+                  <option value="">{t('allBrands') || 'All Brands'}</option>
                   {brands.map((b: any) => (
                     <option key={b.id} value={b.id}>
                       {b.name}
@@ -146,14 +155,127 @@ export default function CatalogPage() {
                 </select>
               </div>
 
+              {/* Type Filter */}
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">{t('condition')}</label>
+                <label className="block text-sm font-medium mb-2">{t('type') || 'Type'}</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={filters.type}
+                  onChange={(e) => handleFilterChange('type', e.target.value)}
+                >
+                  <option value="">All Types</option>
+                  <option value="Road Bike">Road Bike</option>
+                  <option value="Mountain Bike">Mountain Bike</option>
+                  <option value="Gravel Bike">Gravel Bike</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="BMX">BMX</option>
+                  <option value="Kids">Kids</option>
+                </select>
+              </div>
+
+              {/* Price Range Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('priceRange') || 'Price (€)'}</label>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={filters.minPrice}
+                    onChange={(e) => handleFilterChange('minPrice', e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={filters.maxPrice}
+                    onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Year Range Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('year') || 'Year'}</label>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="From"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={filters.minYear}
+                    onChange={(e) => handleFilterChange('minYear', e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    placeholder="To"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={filters.maxYear}
+                    onChange={(e) => handleFilterChange('maxYear', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Material Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('material') || 'Frame Material'}</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={filters.material}
+                  onChange={(e) => handleFilterChange('material', e.target.value)}
+                >
+                  <option value="">All Materials</option>
+                  <option value="Aluminum">Aluminum</option>
+                  <option value="Carbon">Carbon Fiber</option>
+                  <option value="Steel">Steel</option>
+                  <option value="Titanium">Titanium</option>
+                </select>
+              </div>
+
+              {/* Wheel Size Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('wheelSize') || 'Wheel Size'}</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={filters.wheelSize}
+                  onChange={(e) => handleFilterChange('wheelSize', e.target.value)}
+                >
+                  <option value="">All Sizes</option>
+                  <option value="20">20"</option>
+                  <option value="24">24"</option>
+                  <option value="26">26"</option>
+                  <option value="27.5">27.5"</option>
+                  <option value="28">28"</option>
+                  <option value="29">29"</option>
+                </select>
+              </div>
+
+              {/* Frame Size Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('frameSize') || 'Frame Size'}</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={filters.frameSize}
+                  onChange={(e) => handleFilterChange('frameSize', e.target.value)}
+                >
+                  <option value="">All Sizes</option>
+                  <option value="XS">XS (Extra Small)</option>
+                  <option value="S">S (Small)</option>
+                  <option value="M">M (Medium)</option>
+                  <option value="L">L (Large)</option>
+                  <option value="XL">XL (Extra Large)</option>
+                  <option value="XXL">XXL (2XL)</option>
+                </select>
+              </div>
+
+              {/* Condition Filter */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">{t('condition') || 'Condition'}</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={filters.condition}
                   onChange={(e) => handleFilterChange('condition', e.target.value)}
                 >
-                  <option value="">{t('allConditions')}</option>
+                  <option value="">{t('allConditions') || 'All Conditions'}</option>
                   <option value="new">New</option>
                   <option value="like-new">Like New</option>
                   <option value="used">Used</option>
@@ -161,57 +283,42 @@ export default function CatalogPage() {
                 </select>
               </div>
 
+              {/* Location Filter */}
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">{t('priceRange')} (€)</label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={filters.minPrice}
-                    onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={filters.maxPrice}
-                    onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">{t('location')}</label>
+                <label className="block text-sm font-medium mb-2">{t('location') || 'Location'}</label>
                 <input
                   type="text"
                   placeholder="City..."
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={filters.location}
                   onChange={(e) => handleFilterChange('location', e.target.value)}
                 />
               </div>
 
+              {/* Clear Filters Button */}
               <button
                 onClick={handleClearFilters}
-                className="w-full px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm"
               >
-                {t('clear')}
+                {t('clear') || 'Clear Filters'}
               </button>
             </div>
           </aside>
 
           <main className="flex-1">
+            {/* Search and Quick Filters */}
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h2 className="text-2xl font-bold">{t('bicyclesForSale')}</h2>
+                  <h2 className="text-2xl font-bold">{t('bicyclesForSale') || 'Bicycles for Sale'}</h2>
                   <p className="text-sm text-gray-600 mt-1">
-                    {listings.length} {t('listings')}
+                    {listings.length} {t('listings') || 'listings'}
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+
+              {/* Search Input */}
+              <div className="flex gap-2 mb-4">
                 <input
                   type="text"
                   placeholder={t('search_placeholder') || 'Search by model, brand...'}
@@ -220,13 +327,60 @@ export default function CatalogPage() {
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
                 <button
-                  onClick={() => {
-                    // The search is already handled by the filter state change
-                    // This button is just for visual UX
-                  }}
                   className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
                 >
                   🔍 {t('search') || 'Search'}
+                </button>
+              </div>
+
+              {/* Quick Filter Buttons */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                    handleFilterChange('type', 'Road Bike');
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                    filters.type === 'Road Bike'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🚴 Road Bikes
+                </button>
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                    handleFilterChange('type', 'Mountain Bike');
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                    filters.type === 'Mountain Bike'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  ⛰️ Mountain Bikes
+                </button>
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                    handleFilterChange('condition', 'new');
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                    filters.condition === 'new'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  ✨ New
+                </button>
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                  }}
+                  className="px-4 py-2 rounded-lg font-medium transition-colors text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  ↺ All Bikes
                 </button>
               </div>
             </div>
