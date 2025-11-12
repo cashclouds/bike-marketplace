@@ -20,6 +20,7 @@ function ListingContent() {
   const [showContactForm, setShowContactForm] = useState(false);
   const [lang, setLang] = useState('en');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
 
   // Load language
   useEffect(() => {
@@ -83,6 +84,40 @@ function ListingContent() {
 
     localStorage.setItem('favorites', JSON.stringify(favList));
     setIsFavorited(!isFavorited);
+  };
+
+  // Navigate to previous photo
+  const handlePrevPhoto = () => {
+    if (!listing.photos) return;
+    const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos;
+    setSelectedPhotoIndex((selectedPhotoIndex - 1 + photos.length) % photos.length);
+  };
+
+  // Navigate to next photo
+  const handleNextPhoto = () => {
+    if (!listing.photos) return;
+    const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos;
+    setSelectedPhotoIndex((selectedPhotoIndex + 1) % photos.length);
+  };
+
+  // Handle touch start for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  // Handle touch end for swipe
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+
+    // Swipe left (more than 50px) = next photo
+    if (diff > 50) {
+      handleNextPhoto();
+    }
+    // Swipe right (more than 50px) = previous photo
+    else if (diff < -50) {
+      handlePrevPhoto();
+    }
   };
 
   if (loading) {
@@ -149,12 +184,39 @@ function ListingContent() {
           {/* Gallery */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
             {listing.photos && (typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).length > 0 ? (
-              <div className="bg-gray-300 flex items-center justify-center h-96 overflow-hidden">
+              <div
+                className="bg-gray-300 flex items-center justify-center h-96 overflow-hidden relative group"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img
                   src={getImageUrl((typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[selectedPhotoIndex].url)}
                   alt={listing.model_name}
                   className="w-full h-full object-cover"
                 />
+
+                {/* Left arrow button */}
+                <button
+                  onClick={handlePrevPhoto}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Previous photo"
+                >
+                  ←
+                </button>
+
+                {/* Right arrow button */}
+                <button
+                  onClick={handleNextPhoto}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Next photo"
+                >
+                  →
+                </button>
+
+                {/* Photo counter */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                  {selectedPhotoIndex + 1} / {(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).length}
+                </div>
               </div>
             ) : (
               <div className="bg-gray-300 flex items-center justify-center h-96 text-6xl">
