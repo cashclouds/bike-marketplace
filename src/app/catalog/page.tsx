@@ -29,7 +29,7 @@ export default function CatalogPage() {
     frameSize: '',
   });
 
-  // Load language
+  // Load language and saved filters
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
@@ -41,6 +41,19 @@ export default function CatalogPage() {
 
     window.addEventListener('languageChange', handleLangChange);
     return () => window.removeEventListener('languageChange', handleLangChange);
+  }, []);
+
+  // Load saved filters from localStorage on mount
+  useEffect(() => {
+    const savedFilters = localStorage.getItem('catalogFilters');
+    if (savedFilters) {
+      try {
+        const parsedFilters = JSON.parse(savedFilters);
+        setFilters(parsedFilters);
+      } catch (err) {
+        console.error('Error loading saved filters:', err);
+      }
+    }
   }, []);
 
   // Load brands and listings
@@ -80,14 +93,19 @@ export default function CatalogPage() {
   }, [filters]);
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setFilters((prev) => {
+      const updatedFilters = {
+        ...prev,
+        [key]: value,
+      };
+      // Save filters to localStorage
+      localStorage.setItem('catalogFilters', JSON.stringify(updatedFilters));
+      return updatedFilters;
+    });
   };
 
   const handleClearFilters = () => {
-    setFilters({
+    const clearedFilters = {
       brand_id: '',
       type: '',
       minPrice: '',
@@ -101,7 +119,10 @@ export default function CatalogPage() {
       search: '',
       wheelSize: '',
       frameSize: '',
-    });
+    };
+    setFilters(clearedFilters);
+    // Remove filters from localStorage
+    localStorage.removeItem('catalogFilters');
   };
 
   const t = (key: string) => (translations as any)[lang]?.[key as keyof typeof translations.en] || key;
