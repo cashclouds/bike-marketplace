@@ -19,6 +19,7 @@ function ListingContent() {
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [lang, setLang] = useState('en');
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
 
   // Load language
   useEffect(() => {
@@ -150,7 +151,7 @@ function ListingContent() {
             {listing.photos && (typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).length > 0 ? (
               <div className="bg-gray-300 flex items-center justify-center h-96 overflow-hidden">
                 <img
-                  src={getImageUrl((typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[0].url)}
+                  src={getImageUrl((typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos)[selectedPhotoIndex].url)}
                   alt={listing.model_name}
                   className="w-full h-full object-cover"
                 />
@@ -163,9 +164,15 @@ function ListingContent() {
             {listing.photos && (
               <div className="flex gap-2 p-4 overflow-x-auto">
                 {(typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos).map((photo: any, idx: number) => (
-                  <div key={idx} className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg cursor-pointer hover:opacity-75 flex items-center justify-center text-3xl">
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedPhotoIndex(idx)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg cursor-pointer hover:opacity-75 flex items-center justify-center text-3xl transition-all ${
+                      selectedPhotoIndex === idx ? 'ring-2 ring-blue-500' : 'bg-gray-200'
+                    }`}
+                  >
                     {photo.url ? (
-                      <img src={getImageUrl(photo.url)} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(photo.url)} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover rounded-lg" />
                     ) : (
                       '🖼️'
                     )}
