@@ -139,7 +139,19 @@ export const filterListingsSchema = z.object({
     .transform((val) => parseInt(val, 10))
     .pipe(z.number())
     .optional(),
+  minYear: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().min(1900))
+    .optional(),
+  maxYear: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().max(new Date().getFullYear() + 1))
+    .optional(),
   material: z.string().optional(),
+  wheelSize: z.string().optional(),
+  frameSize: z.string().optional(),
   condition: z.string().optional(),
   location: z.string().optional(),
   search: z.string().optional(),

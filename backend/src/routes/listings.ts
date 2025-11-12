@@ -52,7 +52,11 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response): Promise<v
       minPrice,
       maxPrice,
       year,
+      minYear,
+      maxYear,
       material,
+      wheelSize,
+      frameSize,
       condition,
       location,
       limit,
@@ -94,9 +98,33 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response): Promise<v
       paramIndex++;
     }
 
+    if (minYear) {
+      sql += ` AND year >= $${paramIndex}`;
+      params.push(minYear);
+      paramIndex++;
+    }
+
+    if (maxYear) {
+      sql += ` AND year <= $${paramIndex}`;
+      params.push(maxYear);
+      paramIndex++;
+    }
+
     if (material) {
-      sql += ` AND material = $${paramIndex}`;
+      sql += ` AND frame_material = $${paramIndex}`;
       params.push(material);
+      paramIndex++;
+    }
+
+    if (wheelSize) {
+      sql += ` AND wheel_size = $${paramIndex}`;
+      params.push(wheelSize);
+      paramIndex++;
+    }
+
+    if (frameSize) {
+      sql += ` AND frame_size = $${paramIndex}`;
+      params.push(frameSize);
       paramIndex++;
     }
 
