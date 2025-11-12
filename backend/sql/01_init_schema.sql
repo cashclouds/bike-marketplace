@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS listings (
   type VARCHAR(100) NOT NULL,
   year INTEGER,
   material VARCHAR(100),
+  wheel_size VARCHAR(10),
+  frame_size VARCHAR(10),
+  frame_material VARCHAR(100),
   condition VARCHAR(50) NOT NULL DEFAULT 'used' CHECK (condition IN ('new', 'like-new', 'used', 'damaged')),
   price DECIMAL(10, 2) NOT NULL,
   currency VARCHAR(3) DEFAULT 'EUR',
@@ -121,6 +124,9 @@ CREATE INDEX idx_listings_brand_id ON listings(brand_id);
 CREATE INDEX idx_listings_type ON listings(type);
 CREATE INDEX idx_listings_status ON listings(status);
 CREATE INDEX idx_listings_created_at ON listings(created_at DESC);
+CREATE INDEX idx_listings_wheel_size ON listings(wheel_size);
+CREATE INDEX idx_listings_frame_size ON listings(frame_size);
+CREATE INDEX idx_listings_frame_material ON listings(frame_material);
 CREATE INDEX idx_models_brand_id ON models(brand_id);
 CREATE INDEX idx_transactions_buyer_id ON transactions(buyer_id);
 CREATE INDEX idx_transactions_seller_id ON transactions(seller_id);
