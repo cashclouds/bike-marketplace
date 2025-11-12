@@ -37,12 +37,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
         if (token) {
           api.setToken(token);
-          const response = (await api.getCurrentUser()) as any;
-          setUser(response.user);
+          try {
+            const response = (await api.getCurrentUser()) as any;
+            setUser(response.user);
+          } catch (err) {
+            // Token is invalid or expired, clear it
+            console.warn('Token validation failed, clearing auth');
+            api.clearToken();
+            setUser(null);
+          }
         }
       } catch (err) {
         console.error('Auth check failed:', err);
-        setError(null);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -56,11 +63,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = (await api.registerUser(email, password, name, userType, phone)) as any;
 
-      // Get token - server returns accessToken, not token
-      const token = response.token || response.accessToken;
-      if (token) {
-        api.setToken(token);
+      // Backend returns accessToken in the response
+      const token = response.accessToken || response.token;
+      if (!token) {
+        throw new Error('No token returned from server');
       }
+
+      // api.registerUser already calls setToken internally
+      console.log('Token set in API client and localStorage');
 
       setUser(response.user);
     } catch (err) {
@@ -77,15 +87,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = (await api.loginUser(email, password)) as any;
       console.log('Login response:', response);
 
-      // Get token - server returns accessToken, not token
-      const token = response.token || response.accessToken;
+      // Backend returns accessToken in the response
+      const token = response.accessToken || response.token;
       console.log('Token from response:', token);
 
-      // Make sure token is set in api client
-      if (token) {
-        console.log('Setting token in API client');
-        api.setToken(token);
+      if (!token) {
+        throw new Error('No token returned from server');
       }
+
+      // api.loginUser already calls setToken internally, but ensure it's saved
+      console.log('Token set in API client and localStorage');
 
       setUser(response.user);
       console.log('User set in context:', response.user);
