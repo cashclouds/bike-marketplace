@@ -368,7 +368,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3 className="font-bold text-lg mb-4">BikeMarket</h3>
-            <p className="text-gray-400">Estonia's leading bicycle marketplace</p>
+            <p className="text-gray-400">{t('marketplace_tagline') || "Estonia's leading bicycle marketplace"}</p>
           </div>
           <div>
             <h4 className="font-bold mb-4">{t('for_buyers') || 'For Buyers'}</h4>
