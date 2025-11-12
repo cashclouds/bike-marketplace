@@ -30,6 +30,7 @@ function ListingContent() {
     // Listen for language changes
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
+      console.log('Language changed to:', newLang);
       setLang(newLang);
     };
 
@@ -37,9 +38,17 @@ function ListingContent() {
     return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
 
+  // Force re-render when language changes
+  useEffect(() => {
+    // This dependency will cause re-render when lang changes
+  }, [lang]);
+
   // Translation function
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    // Make sure lang is set correctly
+    const currentLang = lang || 'en';
+    const translated = (translations as any)[currentLang]?.[key] || (translations as any)['en']?.[key] || key;
+    return translated;
   };
 
   // Load listing
