@@ -34,7 +34,8 @@
       "Bash(taskkill:*)",
       "Bash(kill:*)",
       "Bash(timeout 30 git push:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "WebFetch(domain:www.auto24.ee)"
     ],
     "deny": [],
     "ask": []

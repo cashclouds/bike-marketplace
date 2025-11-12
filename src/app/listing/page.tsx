@@ -51,6 +51,32 @@ function ListingContent() {
     return translated;
   };
 
+  // Translate condition values
+  const getConditionTranslation = (condition: string): string => {
+    const conditionMap: {[key: string]: string} = {
+      'used': 'used',
+      'new': 'new',
+      'like-new': 'likeNew',
+      'damaged': 'damaged'
+    };
+    return t(conditionMap[condition.toLowerCase()] || condition);
+  };
+
+  // Translate type values
+  const getTypeTranslation = (type: string): string => {
+    const typeMap: {[key: string]: string} = {
+      'road': 'road',
+      'road bike': 'road',
+      'mountain bike': 'mountain_bike',
+      'mountain': 'mountain_bike',
+      'gravel': 'gravel',
+      'hybrid': 'hybrid',
+      'bmx': 'bmx',
+      'kids': 'kids'
+    };
+    return t(typeMap[type.toLowerCase()] || type);
+  };
+
   // Load listing
   useEffect(() => {
     if (!listingId) {
@@ -272,7 +298,7 @@ function ListingContent() {
                 <div className="grid grid-cols-2 gap-4 py-4 border-y">
                   <div>
                     <p className="text-gray-600 text-sm">{t('condition')}</p>
-                    <p className="font-semibold text-gray-900">{listing.condition}</p>
+                    <p className="font-semibold text-gray-900">{getConditionTranslation(listing.condition)}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">{t('year')}</p>
@@ -284,7 +310,7 @@ function ListingContent() {
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">{t('type')}</p>
-                    <p className="font-semibold text-gray-900">{listing.type}</p>
+                    <p className="font-semibold text-gray-900">{getTypeTranslation(listing.type)}</p>
                   </div>
                 </div>
               </div>
@@ -312,11 +338,11 @@ function ListingContent() {
                 <div className="space-y-3">
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">{t('condition')}</span>
-                    <span className="font-semibold">{listing.condition}</span>
+                    <span className="font-semibold">{getConditionTranslation(listing.condition)}</span>
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">{t('type')}</span>
-                    <span className="font-semibold">{listing.type}</span>
+                    <span className="font-semibold">{getTypeTranslation(listing.type)}</span>
                   </div>
                   {listing.material && (
                     <div className="flex justify-between py-2 border-b">
