@@ -325,7 +325,7 @@ function ListingContent() {
 
               {/* Location */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('location') || 'Location'}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('location')}</h2>
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">📍</span>
                   <p className="text-gray-700">{listing.location}</p>

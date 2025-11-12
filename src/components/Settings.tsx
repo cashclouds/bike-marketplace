@@ -235,6 +235,7 @@ const translations = {
     minPhotos: '✓ Minimum 6 photos',
     leftSide: '✓ Full bike from left side',
     rightSide: '✓ Full bike from right side',
+    status: 'Status',
   },
   et: {
     settings: 'Seaded',
@@ -468,6 +469,7 @@ const translations = {
     minPhotos: '✓ Miinimum 6 fotot',
     leftSide: '✓ Täis jalgratas vasakult',
     rightSide: '✓ Täis jalgratas paremalt',
+    status: 'Staatus',
   },
   ru: {
     settings: 'Настройки',
@@ -701,6 +703,7 @@ const translations = {
     minPhotos: '✓ Минимум 6 фото',
     leftSide: '✓ Полный велосипед слева',
     rightSide: '✓ Полный велосипед справа',
+    status: 'Статус',
   },
   lt: {
     settings: 'Nustatymai',
@@ -934,6 +937,7 @@ const translations = {
     minPhotos: '✓ Mažiausiai 6 nuotraukos',
     leftSide: '✓ Pilnas dviratis iš kairio',
     rightSide: '✓ Pilnas dviratis iš dešinio',
+    status: 'Statusas',
   },
   lv: {
     settings: 'Iestatījumi',
@@ -1167,6 +1171,7 @@ const translations = {
     minPhotos: '✓ Minimums 6 fotogrāfijas',
     leftSide: '✓ Pilns velosipēds no kreisās puses',
     rightSide: '✓ Pilns velosipēds no labās puses',
+    status: 'Statuss',
   },
 };
 
