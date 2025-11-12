@@ -22,6 +22,7 @@ export default function Home() {
   const { isAuthenticated, user } = useAuth();
   const [lang, setLang] = useState('en');
   const [selectedListing, setSelectedListing] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
@@ -37,6 +38,22 @@ export default function Home() {
   }, []);
 
   const t = (key: string) => translations[lang as keyof typeof translations][key as keyof typeof translations.en] || key;
+
+  // Handle search
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // Navigate to catalog with search parameter
+      const params = new URLSearchParams({ search: searchQuery });
+      window.location.href = `/catalog?${params.toString()}`;
+    }
+  };
+
+  // Handle Enter key in search input
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -74,9 +91,15 @@ export default function Home() {
             <input
               type="text"
               placeholder={t('search_placeholder') || 'Search for bikes, brands, models...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
               className="flex-1 px-4 py-3 rounded-lg text-gray-800 dark:text-gray-900"
             />
-            <button className="px-8 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition-colors">
+            <button
+              onClick={handleSearch}
+              className="px-8 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg transition-colors cursor-pointer"
+            >
               {t('search') || 'Search'}
             </button>
           </div>
