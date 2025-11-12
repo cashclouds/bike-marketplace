@@ -8,7 +8,8 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export default function CatalogPage() {
   const { isAuthenticated, user } = useAuth();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [listings, setListings] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ export default function CatalogPage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLangChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -129,7 +131,10 @@ export default function CatalogPage() {
     localStorage.removeItem('catalogFilters');
   };
 
-  const t = (key: string) => (translations as any)[lang]?.[key as keyof typeof translations.en] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return (translations as any)[currentLang]?.[key as keyof typeof translations.en] || key;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">

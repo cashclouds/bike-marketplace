@@ -11,7 +11,8 @@ import Settings, { translations } from '@/components/Settings';
 export default function MyListingsPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('active');
@@ -20,6 +21,7 @@ export default function MyListingsPage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -32,7 +34,8 @@ export default function MyListingsPage() {
 
   // Translation function
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
   };
 
   useEffect(() => {

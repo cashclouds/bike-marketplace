@@ -9,7 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
 export default function SellPage() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,6 +31,7 @@ export default function SellPage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLangChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -40,7 +42,10 @@ export default function SellPage() {
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  const t = (key: string) => translations[lang as keyof typeof translations][key as keyof typeof translations.en] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations][key as keyof typeof translations.en] || key;
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));

@@ -1177,7 +1177,8 @@ const translations = {
 
 export default function Settings() {
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [theme, setTheme] = useState('light');
   const [color, setColor] = useState('blue');
   const { editMode, toggleEditMode, resetLayout } = useLayout();
@@ -1188,6 +1189,7 @@ export default function Settings() {
       const savedTheme = localStorage.getItem('theme') || 'light';
       const savedColor = localStorage.getItem('color') || 'blue';
       setLang(savedLang);
+      setLangLoaded(true);
       setTheme(savedTheme);
       setColor(savedColor);
       document.documentElement.className = `theme-${savedTheme} color-${color}`;
@@ -1195,7 +1197,10 @@ export default function Settings() {
     }
   }, []);
 
-  const t = (key: string) => (translations as any)[lang as keyof typeof translations][key as any] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return (translations as any)[currentLang as keyof typeof translations][key as any] || key;
+  };
 
   const changeLang = (newLang: string) => {
     setLang(newLang);

@@ -10,7 +10,8 @@ import Settings, { translations } from '@/components/Settings';
 export default function FavoritesPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,6 +19,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -30,7 +32,8 @@ export default function FavoritesPage() {
 
   // Translation function
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
   };
 
   useEffect(() => {

@@ -24,7 +24,8 @@ type SortOption = 'price_asc' | 'price_desc' | 'newest' | 'oldest';
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [selectedListing, setSelectedListing] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -35,6 +36,7 @@ export default function Home() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLangChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -45,7 +47,10 @@ export default function Home() {
     return () => window.removeEventListener('languageChange', handleLangChange);
   }, []);
 
-  const t = (key: string) => translations[lang as keyof typeof translations][key as keyof typeof translations.en] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations][key as keyof typeof translations.en] || key;
+  };
 
   // Fetch listings based on search query
   useEffect(() => {

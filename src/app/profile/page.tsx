@@ -10,7 +10,8 @@ import Settings, { translations } from '@/components/Settings';
 export default function ProfilePage() {
   const { user, isAuthenticated, logout, updateProfile } = useAuth();
   const router = useRouter();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '' });
@@ -21,6 +22,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -33,7 +35,8 @@ export default function ProfilePage() {
 
   // Translation function
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
   };
 
   useEffect(() => {

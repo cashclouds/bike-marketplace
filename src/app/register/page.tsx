@@ -8,11 +8,13 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
   const { isAuthenticated, user } = useAuth();
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -24,7 +26,8 @@ export default function RegisterPage() {
   }, []);
 
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return translations[currentLang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
   };
 
   return (

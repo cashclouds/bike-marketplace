@@ -14,7 +14,8 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,6 +25,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     if (typeof window !== 'undefined') {
       const savedLang = localStorage.getItem('lang') || 'en';
       setLang(savedLang);
+      setLangLoaded(true);
     }
 
     const handleLanguageChange = () => {
@@ -37,7 +39,10 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
 
-  const t = (key: string) => (translations as any)[lang as keyof typeof translations][key as any] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return (translations as any)[currentLang as keyof typeof translations][key as any] || key;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

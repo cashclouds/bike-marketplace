@@ -10,7 +10,8 @@ export default function PhotoUploader({ photos: externalPhotos, setPhotos: exter
   const [localPhotos, setLocalPhotos] = useState<any[]>([]);
   const [dragging, setDragging] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
 
   // Use external state if provided, otherwise use local state
   const photos = externalPhotos !== undefined ? externalPhotos : localPhotos;
@@ -19,6 +20,7 @@ export default function PhotoUploader({ photos: externalPhotos, setPhotos: exter
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     const handleLangChange = () => {
       const newLang = localStorage.getItem('lang') || 'en';
@@ -67,7 +69,10 @@ export default function PhotoUploader({ photos: externalPhotos, setPhotos: exter
     },
   };
 
-  const t = (key: string) => (translations as any)[lang as keyof typeof translations][key as any] || key;
+  const t = (key: string) => {
+    const currentLang = lang && langLoaded ? lang : 'en';
+    return (translations as any)[currentLang as keyof typeof translations][key as any] || key;
+  };
 
   const handleFiles = (files: FileList) => {
     const newPhotos = Array.from(files).map((file) => ({

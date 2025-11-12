@@ -18,7 +18,8 @@ function ListingContent() {
   const [error, setError] = useState<string | null>(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
+  const [langLoaded, setLangLoaded] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
 
@@ -26,6 +27,7 @@ function ListingContent() {
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
     setLang(savedLang);
+    setLangLoaded(true);
 
     // Listen for language changes
     const handleLanguageChange = () => {
@@ -41,12 +43,12 @@ function ListingContent() {
   // Force re-render when language changes
   useEffect(() => {
     // This dependency will cause re-render when lang changes
-  }, [lang]);
+  }, [lang, langLoaded]);
 
   // Translation function
   const t = (key: string): string => {
-    // Make sure lang is set correctly
-    const currentLang = lang || 'en';
+    // Make sure lang is set correctly - use 'en' as fallback if lang not loaded yet
+    const currentLang = lang && langLoaded ? lang : 'en';
     const translated = (translations as any)[currentLang]?.[key] || (translations as any)['en']?.[key] || key;
     return translated;
   };
