@@ -124,7 +124,7 @@ function ListingContent() {
     return (
       <main className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-gray-600">Loading listing...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </main>
     );
@@ -134,9 +134,9 @@ function ListingContent() {
     return (
       <main className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-red-600 mb-4">{error || 'Listing not found'}</p>
+          <p className="text-red-600 mb-4">{error || t('listingNotFound') || 'Listing not found'}</p>
           <Link href="/catalog" className="text-blue-600 hover:underline">
-            Back to Catalog
+            {t('backToCatalog')}
           </Link>
         </div>
       </main>
@@ -166,11 +166,11 @@ function ListingContent() {
               <Settings />
               {isAuthenticated ? (
                 <Link href="/profile" className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
-                  Profile
+                  {t('profile')}
                 </Link>
               ) : (
                 <Link href="/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg">
-                  Login
+                  {t('login')}
                 </Link>
               )}
             </div>
@@ -262,19 +262,19 @@ function ListingContent() {
                 {/* Quick Info */}
                 <div className="grid grid-cols-2 gap-4 py-4 border-y">
                   <div>
-                    <p className="text-gray-600 text-sm">Condition</p>
+                    <p className="text-gray-600 text-sm">{t('condition')}</p>
                     <p className="font-semibold text-gray-900">{listing.condition}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">Year</p>
+                    <p className="text-gray-600 text-sm">{t('year')}</p>
                     <p className="font-semibold text-gray-900">{listing.year || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">Material</p>
+                    <p className="text-gray-600 text-sm">{t('material')}</p>
                     <p className="font-semibold text-gray-900">{listing.material || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">Type</p>
+                    <p className="text-gray-600 text-sm">{t('type')}</p>
                     <p className="font-semibold text-gray-900">{listing.type}</p>
                   </div>
                 </div>
@@ -283,14 +283,14 @@ function ListingContent() {
               {/* Description */}
               {listing.description && (
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('description')}</h2>
                   <p className="text-gray-700 whitespace-pre-wrap">{listing.description}</p>
                 </div>
               )}
 
               {/* Location */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Location</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('location') || 'Location'}</h2>
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">📍</span>
                   <p className="text-gray-700">{listing.location}</p>
@@ -299,30 +299,30 @@ function ListingContent() {
 
               {/* Specifications */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Specifications</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('specifications')}</h2>
                 <div className="space-y-3">
                   <div className="flex justify-between py-2 border-b">
-                    <span className="text-gray-600">Condition</span>
+                    <span className="text-gray-600">{t('condition')}</span>
                     <span className="font-semibold">{listing.condition}</span>
                   </div>
                   <div className="flex justify-between py-2 border-b">
-                    <span className="text-gray-600">Type</span>
+                    <span className="text-gray-600">{t('type')}</span>
                     <span className="font-semibold">{listing.type}</span>
                   </div>
                   {listing.material && (
                     <div className="flex justify-between py-2 border-b">
-                      <span className="text-gray-600">Material</span>
+                      <span className="text-gray-600">{t('material')}</span>
                       <span className="font-semibold">{listing.material}</span>
                     </div>
                   )}
                   {listing.year && (
                     <div className="flex justify-between py-2 border-b">
-                      <span className="text-gray-600">Year</span>
+                      <span className="text-gray-600">{t('year')}</span>
                       <span className="font-semibold">{listing.year}</span>
                     </div>
                   )}
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Posted</span>
+                    <span className="text-gray-600">{t('posted')}</span>
                     <span className="font-semibold">
                       {new Date(listing.created_at).toLocaleDateString()}
                     </span>
@@ -335,7 +335,7 @@ function ListingContent() {
             <div className="lg:col-span-1 space-y-4">
               {/* Seller Info */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Seller</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">{t('seller')}</h3>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">
                     👤
@@ -346,14 +346,14 @@ function ListingContent() {
                   </div>
                 </div>
                 <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors mb-2">
-                  View Seller Profile
+                  {t('viewSellerProfile')}
                 </button>
               </div>
 
               {/* Action Buttons */}
               <div className="bg-white rounded-lg shadow-md p-6 space-y-3">
                 <button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                  💬 Contact Seller
+                  💬 {t('contactSeller')}
                 </button>
                 <button
                   onClick={handleFavorite}
@@ -363,18 +363,18 @@ function ListingContent() {
                       : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
                   }`}
                 >
-                  {isFavorited ? '❤️ Favorited' : '🤍 Add to Favorites'}
+                  {isFavorited ? `❤️ ${t('favorited')}` : `🤍 ${t('addToFavorites')}`}
                 </button>
                 {isAuthenticated && user?.user_type === 'individual' && (
                   <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    🛒 Buy Now
+                    🛒 {t('buyNow')}
                   </button>
                 )}
               </div>
 
               {/* Share */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Share</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">{t('share')}</h3>
                 <div className="flex gap-2">
                   <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm">
                     f
@@ -390,12 +390,12 @@ function ListingContent() {
 
               {/* Safety Tips */}
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-yellow-900 mb-3">Safety Tips</h3>
+                <h3 className="text-lg font-bold text-yellow-900 mb-3">{t('safetyTips')}</h3>
                 <ul className="text-sm text-yellow-800 space-y-2">
-                  <li>✓ Meet in public places</li>
-                  <li>✓ Check item before payment</li>
-                  <li>✓ Use BikeMarket payment</li>
-                  <li>✓ Report suspicious activity</li>
+                  <li>✓ {t('meetInPublic')}</li>
+                  <li>✓ {t('checkBeforePayment')}</li>
+                  <li>✓ {t('useBikeMarketPayment')}</li>
+                  <li>✓ {t('reportSuspicious')}</li>
                 </ul>
               </div>
             </div>
@@ -403,7 +403,7 @@ function ListingContent() {
 
           {/* Related Listings */}
           <div className="mt-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Listings</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('relatedListings')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">

@@ -323,7 +323,7 @@ export default function CatalogPage() {
               {/* Clear Filters Button */}
               <button
                 onClick={handleClearFilters}
-                className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm"
+                className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm active:bg-gray-400"
               >
                 {t('clear') || 'Clear Filters'}
               </button>
@@ -350,9 +350,18 @@ export default function CatalogPage() {
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      // Search is automatically triggered by handleFilterChange
+                    }
+                  }}
                 />
                 <button
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                  onClick={() => {
+                    // Search is already triggered by handleFilterChange, but button provides visual feedback
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium active:bg-blue-800"
                 >
                   🔍 {t('search') || 'Search'}
                 </button>
@@ -361,10 +370,7 @@ export default function CatalogPage() {
               {/* Quick Filter Buttons */}
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => {
-                    handleClearFilters();
-                    handleFilterChange('type', 'Road Bike');
-                  }}
+                  onClick={() => handleFilterChange('type', 'Road Bike')}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                     filters.type === 'Road Bike'
                       ? 'bg-blue-600 text-white'
@@ -374,10 +380,7 @@ export default function CatalogPage() {
                   🚴 Road Bikes
                 </button>
                 <button
-                  onClick={() => {
-                    handleClearFilters();
-                    handleFilterChange('type', 'Mountain Bike');
-                  }}
+                  onClick={() => handleFilterChange('type', 'Mountain Bike')}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                     filters.type === 'Mountain Bike'
                       ? 'bg-blue-600 text-white'
@@ -387,10 +390,7 @@ export default function CatalogPage() {
                   ⛰️ Mountain Bikes
                 </button>
                 <button
-                  onClick={() => {
-                    handleClearFilters();
-                    handleFilterChange('condition', 'new');
-                  }}
+                  onClick={() => handleFilterChange('condition', 'new')}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                     filters.condition === 'new'
                       ? 'bg-blue-600 text-white'
@@ -400,10 +400,8 @@ export default function CatalogPage() {
                   ✨ New
                 </button>
                 <button
-                  onClick={() => {
-                    handleClearFilters();
-                  }}
-                  className="px-4 py-2 rounded-lg font-medium transition-colors text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  onClick={() => handleClearFilters()}
+                  className="px-4 py-2 rounded-lg font-medium transition-colors text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300"
                 >
                   ↺ All Bikes
                 </button>
