@@ -35,6 +35,9 @@ class ApiClient {
   }
 
   private getHeaders(): HeadersInit {
+    // Reload token from localStorage before each request to ensure we have the latest token
+    this.loadToken();
+
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };

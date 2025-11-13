@@ -96,17 +96,6 @@ export default function SellPage() {
 
       console.log('User authenticated:', user.email);
 
-      // Get auth token
-      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      if (!token) {
-        console.log('No token in localStorage');
-        setError(t('tokenNotFound'));
-        setLoading(false);
-        return;
-      }
-
-      console.log('Publishing listing with token:', token.substring(0, 20) + '...');
-
       // Create FormData for multipart upload
       const data = new FormData();
       data.append('brand', formData.brand);
@@ -125,6 +114,17 @@ export default function SellPage() {
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       console.log('Sending to:', apiUrl + '/listings');
+
+      // Get current token from localStorage to ensure we have the latest token
+      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      if (!token) {
+        console.log('No token in localStorage');
+        setError(t('tokenNotFound'));
+        setLoading(false);
+        return;
+      }
+
+      console.log('Publishing listing with token:', token.substring(0, 20) + '...');
 
       const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',
