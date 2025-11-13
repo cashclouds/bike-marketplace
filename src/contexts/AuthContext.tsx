@@ -35,25 +35,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const checkAuth = async () => {
       try {
         const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+        console.log('[AuthContext.checkAuth] Starting auth check, token exists:', !!token);
         if (token) {
           api.setToken(token);
           try {
-            console.log('Validating token with getCurrentUser API...');
+            console.log('[AuthContext.checkAuth] Validating token with getCurrentUser API...');
             const response = (await api.getCurrentUser()) as any;
-            console.log('Token validation successful, user:', response.user?.email);
+            console.log('[AuthContext.checkAuth] ✅ Token validation successful, user:', response.user?.email);
             setUser(response.user);
           } catch (err) {
             // Token is invalid or expired, clear it
             const errorMsg = err instanceof Error ? err.message : String(err);
-            console.warn('Token validation failed:', errorMsg);
+            console.warn('[AuthContext.checkAuth] ❌ Token validation failed:', errorMsg);
+            console.warn('[AuthContext.checkAuth] Clearing token and user due to validation failure');
             api.clearToken();
             setUser(null);
           }
         } else {
-          console.log('No token in localStorage during checkAuth');
+          console.log('[AuthContext.checkAuth] No token in localStorage during checkAuth');
+          setLoading(false);
         }
       } catch (err) {
-        console.error('Auth check failed:', err);
+        console.error('[AuthContext.checkAuth] Auth check failed:', err);
         setUser(null);
       } finally {
         setLoading(false);

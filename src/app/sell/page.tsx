@@ -14,9 +14,15 @@ export default function SellPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mountCount, setMountCount] = useState(0);
   const brands = ['Trek', 'Giant', 'Specialized', 'Cannondale', 'Scott', 'Merida', 'Cube', 'Canyon', 'Orbea', 'Bianchi'];
 
-  console.log('SellPage mounted. isAuthenticated:', isAuthenticated, 'user:', user?.email);
+  // Track mounts and log authentication status
+  useEffect(() => {
+    setMountCount(prev => prev + 1);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+    console.log(`[SellPage MOUNT #${mountCount + 1}] isAuthenticated: ${isAuthenticated}, user: ${user?.email}, token: ${token ? 'YES' : 'NO'}`);
+  }, [isAuthenticated, user]);
 
   // Form state
   const [formData, setFormData] = useState({
