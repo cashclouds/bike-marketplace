@@ -176,3 +176,8 @@ For questions or business inquiries, contact: [Your Email]
 ---
 
 **Built with ❤️ for Estonian cycling community**
+
+## Latest Updates (13/11/2025)
+- ✅ Fixed language synchronization issue - translations now properly load on component mount
+- ✅ Added langLoaded state flag to prevent hydration mismatch
+- ✅ Applied fix to all 13 components and pages
