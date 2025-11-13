@@ -116,15 +116,19 @@ export default function SellPage() {
       console.log('Sending to:', apiUrl + '/listings');
 
       // Get current token from localStorage to ensure we have the latest token
+      console.log('Getting token from localStorage...');
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      console.log('Token from localStorage:', token ? `${token.substring(0, 20)}... (${token.length} chars)` : 'NULL');
+
       if (!token) {
-        console.log('No token in localStorage');
+        console.log('❌ No token in localStorage!');
+        console.log('All localStorage keys:', Object.keys(localStorage));
         setError(t('tokenNotFound'));
         setLoading(false);
         return;
       }
 
-      console.log('Publishing listing with token:', token.substring(0, 20) + '...');
+      console.log('✅ Publishing listing with token:', token.substring(0, 20) + '...');
 
       const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',

@@ -38,14 +38,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (token) {
           api.setToken(token);
           try {
+            console.log('Validating token with getCurrentUser API...');
             const response = (await api.getCurrentUser()) as any;
+            console.log('Token validation successful, user:', response.user?.email);
             setUser(response.user);
           } catch (err) {
             // Token is invalid or expired, clear it
-            console.warn('Token validation failed, clearing auth');
+            const errorMsg = err instanceof Error ? err.message : String(err);
+            console.warn('Token validation failed:', errorMsg);
             api.clearToken();
             setUser(null);
           }
+        } else {
+          console.log('No token in localStorage during checkAuth');
         }
       } catch (err) {
         console.error('Auth check failed:', err);
@@ -95,11 +100,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('No token returned from server');
       }
 
+      // Verify token is in localStorage after login
+      const savedToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      console.log('Token in localStorage after login:', savedToken ? 'YES ✅' : 'NO ❌');
+
       // api.loginUser already calls setToken internally, but ensure it's saved
       console.log('Token set in API client and localStorage');
 
       setUser(response.user);
       console.log('User set in context:', response.user);
+      console.log('isAuthenticated will be:', !!response.user);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       setError(errorMessage);
