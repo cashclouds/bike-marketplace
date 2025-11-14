@@ -35,25 +35,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const checkAuth = async () => {
       try {
         const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-        console.log('[AuthContext.checkAuth] Starting auth check, token exists:', !!token);
-        if (token) {
+        const userStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+
+        console.log('[AuthContext.checkAuth] Token exists:', !!token);
+
+        if (token && userStr) {
+          // If token exists, trust it and set it in the API client
           api.setToken(token);
-          try {
-            console.log('[AuthContext.checkAuth] Validating token with getCurrentUser API...');
-            const response = (await api.getCurrentUser()) as any;
-            console.log('[AuthContext.checkAuth] ✅ Token validation successful, user:', response.user?.email);
-            setUser(response.user);
-          } catch (err) {
-            // Token is invalid or expired, clear it
-            const errorMsg = err instanceof Error ? err.message : String(err);
-            console.warn('[AuthContext.checkAuth] ❌ Token validation failed:', errorMsg);
-            console.warn('[AuthContext.checkAuth] Clearing token and user due to validation failure');
-            api.clearToken();
-            setUser(null);
-          }
+          const userData = JSON.parse(userStr);
+          setUser(userData);
+          console.log('[AuthContext.checkAuth] ✅ Restored user from localStorage:', userData.email);
         } else {
-          console.log('[AuthContext.checkAuth] No token in localStorage during checkAuth');
-          setLoading(false);
+          console.log('[AuthContext.checkAuth] No token or user data found');
         }
       } catch (err) {
         console.error('[AuthContext.checkAuth] Auth check failed:', err);
@@ -103,16 +96,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('No token returned from server');
       }
 
-      // Verify token is in localStorage after login
-      const savedToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      console.log('Token in localStorage after login:', savedToken ? 'YES ✅' : 'NO ❌');
+      // Save user data to localStorage so we can restore it on page reload
+      if (typeof window !== 'undefined' && response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+        console.log('User saved to localStorage:', response.user.email);
+      }
 
-      // api.loginUser already calls setToken internally, but ensure it's saved
-      console.log('Token set in API client and localStorage');
+      // api.loginUser already calls setToken internally
+      console.log('✅ Token and user saved to localStorage');
 
       setUser(response.user);
-      console.log('User set in context:', response.user);
-      console.log('isAuthenticated will be:', !!response.user);
+      console.log('✅ User set in context:', response.user.email);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       setError(errorMessage);
@@ -122,8 +116,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     api.clearToken();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user');
+    }
     setUser(null);
     setError(null);
+    console.log('Logged out and cleared all auth data');
   };
 
   const updateProfile = async (name?: string, phone?: string) => {

@@ -14,15 +14,7 @@ export default function SellPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [mountCount, setMountCount] = useState(0);
   const brands = ['Trek', 'Giant', 'Specialized', 'Cannondale', 'Scott', 'Merida', 'Cube', 'Canyon', 'Orbea', 'Bianchi'];
-
-  // Track mounts and log authentication status
-  useEffect(() => {
-    setMountCount(prev => prev + 1);
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    console.log(`[SellPage MOUNT #${mountCount + 1}] isAuthenticated: ${isAuthenticated}, user: ${user?.email}, token: ${token ? 'YES' : 'NO'}`);
-  }, [isAuthenticated, user]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -121,20 +113,16 @@ export default function SellPage() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       console.log('Sending to:', apiUrl + '/listings');
 
-      // Get current token from localStorage to ensure we have the latest token
-      console.log('Getting token from localStorage...');
+      // Get auth token
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      console.log('Token from localStorage:', token ? `${token.substring(0, 20)}... (${token.length} chars)` : 'NULL');
-
       if (!token) {
-        console.log('❌ No token in localStorage!');
-        console.log('All localStorage keys:', Object.keys(localStorage));
+        console.log('❌ No token found - user may have been logged out');
         setError(t('tokenNotFound'));
         setLoading(false);
         return;
       }
 
-      console.log('✅ Publishing listing with token:', token.substring(0, 20) + '...');
+      console.log('✅ Publishing with token:', token.substring(0, 20) + '...');
 
       const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',
