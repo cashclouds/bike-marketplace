@@ -383,101 +383,147 @@ router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response): Prom
 
 // Delete listing
 router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
+  console.log('========================================');
+  console.log('[DELETE] 🗑️ DELETE LISTING REQUEST');
+  console.log('[DELETE] Listing ID:', req.params.id);
+  console.log('[DELETE] User ID:', req.user?.id);
+  console.log('[DELETE] Timestamp:', new Date().toISOString());
+  console.log('========================================');
+
   try {
     const { id } = req.params;
-    console.log('[DELETE] Starting deletion of listing:', id);
-    console.log('[DELETE] Request user ID:', req.user?.id);
+
+    // Validate ID
+    if (!id) {
+      console.error('[DELETE] ❌ No listing ID provided');
+      res.status(400).json({ error: 'Listing ID is required' });
+      return;
+    }
+
+    console.log('[DELETE] Step 1: Fetching listing from DB...');
 
     // Check if user is the owner
     const listingResult = await query('SELECT user_id, photos FROM listings WHERE id = $1', [id]);
 
     if (listingResult.rows.length === 0) {
-      console.log('[DELETE] Listing not found:', id);
+      console.log('[DELETE] ❌ Listing not found in database:', id);
       res.status(404).json({ error: 'Listing not found' });
       return;
     }
 
     const listing = listingResult.rows[0];
-    console.log('[DELETE] Listing user_id:', listing.user_id, 'Request user_id:', req.user?.id);
+    console.log('[DELETE] ✅ Listing found');
+    console.log('[DELETE]   - Listing owner user_id:', listing.user_id);
+    console.log('[DELETE]   - Request user_id:', req.user?.id);
+    console.log('[DELETE]   - Match:', listing.user_id === req.user?.id);
 
+    // Check authorization
     if (listing.user_id !== req.user?.id) {
-      console.log('[DELETE] ❌ Unauthorized: User', req.user?.id, 'does not own listing', id);
+      console.log('[DELETE] ❌ UNAUTHORIZED: User is not the owner');
       res.status(403).json({ error: 'Not authorized to delete this listing' });
       return;
     }
 
-    console.log('[DELETE] ✅ User authorized, proceeding with deletion...');
+    console.log('[DELETE] ✅ Authorization check passed');
+    console.log('[DELETE] Step 2: Deleting related records...');
 
-    // Step 1: Delete messages associated with this listing (CASCADE)
-    console.log('[DELETE] Step 1: Deleting messages...');
-    await query('DELETE FROM messages WHERE listing_id = $1', [id]);
-    console.log('[DELETE] ✅ Messages deleted');
+    try {
+      // Delete messages
+      console.log('[DELETE]   - Deleting messages...');
+      const msgResult = await query('DELETE FROM messages WHERE listing_id = $1', [id]);
+      console.log('[DELETE]   ✅ Deleted', msgResult.rowCount, 'messages');
+    } catch (e) {
+      console.error('[DELETE]   ⚠️ Messages deletion failed (continuing):', (e as any).message);
+    }
 
-    // Step 2: Delete reviews associated with transactions from this listing
-    console.log('[DELETE] Step 2: Deleting reviews from transactions...');
-    await query(
-      `DELETE FROM reviews
-       WHERE transaction_id IN (
-         SELECT id FROM transactions WHERE listing_id = $1
-       )`,
-      [id]
-    );
-    console.log('[DELETE] ✅ Reviews deleted');
+    try {
+      // Delete reviews from transactions
+      console.log('[DELETE]   - Deleting reviews from transactions...');
+      const txnResult = await query(
+        `DELETE FROM reviews WHERE transaction_id IN (SELECT id FROM transactions WHERE listing_id = $1)`,
+        [id]
+      );
+      console.log('[DELETE]   ✅ Deleted', txnResult.rowCount, 'reviews');
+    } catch (e) {
+      console.error('[DELETE]   ⚠️ Reviews deletion failed (continuing):', (e as any).message);
+    }
 
-    // Step 3: Delete transactions associated with this listing
-    console.log('[DELETE] Step 3: Deleting transactions...');
-    await query('DELETE FROM transactions WHERE listing_id = $1', [id]);
-    console.log('[DELETE] ✅ Transactions deleted');
+    try {
+      // Delete transactions
+      console.log('[DELETE]   - Deleting transactions...');
+      const txnDelete = await query('DELETE FROM transactions WHERE listing_id = $1', [id]);
+      console.log('[DELETE]   ✅ Deleted', txnDelete.rowCount, 'transactions');
+    } catch (e) {
+      console.error('[DELETE]   ⚠️ Transactions deletion failed (continuing):', (e as any).message);
+    }
 
-    // Step 4: Delete the listing itself
-    console.log('[DELETE] Step 4: Deleting listing...');
-    const deleteResult = await query('DELETE FROM listings WHERE id = $1 RETURNING *', [id]);
-    console.log('[DELETE] ✅ Listing deleted');
+    console.log('[DELETE] Step 3: Deleting listing from database...');
 
-    // Step 5: Delete associated photo files from storage
+    try {
+      const deleteResult = await query('DELETE FROM listings WHERE id = $1', [id]);
+      console.log('[DELETE] ✅ Listing deleted from database');
+      console.log('[DELETE]   - Rows affected:', deleteResult.rowCount);
+    } catch (e) {
+      console.error('[DELETE] ❌ CRITICAL: Could not delete listing from database');
+      console.error('[DELETE] Error:', (e as any).message);
+      console.error('[DELETE] Error code:', (e as any).code);
+      console.error('[DELETE] Error detail:', (e as any).detail);
+      throw e;
+    }
+
+    console.log('[DELETE] Step 4: Cleaning up photo files...');
+
     if (listing.photos) {
       try {
-        console.log('[DELETE] Step 5: Deleting photo files...');
         const photos = JSON.parse(listing.photos);
+        console.log('[DELETE]   - Found', photos.length, 'photos to cleanup');
+
         for (const photo of photos) {
           try {
-            // Try to delete from Cloudinary if it's a Cloudinary URL
             if (photo.url && photo.url.includes('cloudinary')) {
-              console.log('[DELETE] Attempting to delete from Cloudinary:', photo.url);
               await deleteFromCloudinary(photo.url).catch(e => {
-                console.log('[DELETE] Cloudinary delete failed (not critical):', e);
+                console.log('[DELETE]   ⚠️ Cloudinary delete failed:', (e as any).message);
               });
+              console.log('[DELETE]   ✅ Cloudinary photo deleted:', photo.url.substring(0, 50) + '...');
             } else if (photo.filename) {
-              // Delete local file
               const filePath = path.join(uploadsDir, photo.filename);
               if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
-                console.log('[DELETE] ✅ Local photo file deleted:', photo.filename);
+                console.log('[DELETE]   ✅ Local photo deleted:', photo.filename);
               }
             }
           } catch (photoError) {
-            console.log('[DELETE] Warning: Could not delete photo:', photo.filename, photoError);
-            // Don't fail the whole operation if photo deletion fails
+            console.log('[DELETE]   ⚠️ Photo cleanup error (non-critical):', (photoError as any).message);
           }
         }
-        console.log('[DELETE] ✅ Photo files cleanup completed');
+        console.log('[DELETE] ✅ Photo cleanup completed');
       } catch (photoParseError) {
-        console.log('[DELETE] Warning: Could not parse photos JSON:', photoParseError);
+        console.log('[DELETE]   ⚠️ Could not parse photos JSON:', (photoParseError as any).message);
       }
     }
 
-    console.log('[DELETE] ✅✅✅ Listing deletion completed successfully');
+    console.log('========================================');
+    console.log('[DELETE] ✅✅✅ SUCCESS: Listing deleted');
+    console.log('========================================');
+
     res.json({ message: 'Listing deleted successfully' });
   } catch (error) {
-    console.error('[DELETE] ❌ Error during deletion:', error);
+    console.log('========================================');
+    console.error('[DELETE] ❌❌❌ ERROR OCCURRED');
+    console.error('[DELETE] Error type:', typeof error);
+    console.error('[DELETE] Error constructor:', (error as any).constructor.name);
     console.error('[DELETE] Error message:', (error as any).message);
     console.error('[DELETE] Error code:', (error as any).code);
     console.error('[DELETE] Error detail:', (error as any).detail);
+    console.error('[DELETE] Full error:', error);
+    console.log('========================================');
+
     logger.error('Delete listing error:', error as Error);
+
     res.status(500).json({
       error: 'Failed to delete listing',
-      details: (error as any).message,
-      code: (error as any).code
+      details: (error as any).message || 'Unknown error',
+      code: (error as any).code,
     });
   }
 });
