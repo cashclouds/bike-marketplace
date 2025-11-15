@@ -41,6 +41,21 @@ app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads'))
 // HTTP request logging middleware
 app.use(httpLogger);
 
+// Global middleware to log all DELETE requests
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (req.method === 'DELETE') {
+    console.log('');
+    console.log('┌─────────────────────────────────────────────');
+    console.log('│ 🗑️  DELETE REQUEST RECEIVED');
+    console.log('│ Path:', req.path);
+    console.log('│ User:', (req as any).user?.id || 'anonymous');
+    console.log('│ Timestamp:', new Date().toISOString());
+    console.log('└─────────────────────────────────────────────');
+    console.log('');
+  }
+  next();
+});
+
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'API is running', timestamp: new Date().toISOString() });
