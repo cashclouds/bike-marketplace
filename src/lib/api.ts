@@ -117,6 +117,14 @@ class ApiClient {
     return this.handleResponse(response);
   }
 
+  async getUser(userId: string) {
+    const response = await fetch(`${this.baseUrl}/users/${userId}`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
+    return this.handleResponse(response);
+  }
+
   async updateUserProfile(name?: string, phone?: string) {
     const response = await fetch(`${this.baseUrl}/users/me`, {
       method: 'PUT',

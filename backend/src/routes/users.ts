@@ -147,6 +147,28 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response): Promi
   }
 });
 
+// Get user by ID (public endpoint for viewing seller profiles)
+router.get('/:id', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const result = await query(
+      'SELECT id, email, name, user_type, phone, created_at FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.json({ user: result.rows[0] });
+  } catch (error) {
+    logger.error('Get user by ID error:', error as Error);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
 // Update user profile
 router.put('/me', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
