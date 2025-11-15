@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
@@ -10,6 +10,7 @@ import Settings from '@/components/Settings';
 import { translations } from '@/components/Settings';
 
 function ListingContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get('id');
   const { user, isAuthenticated } = useAuth();
@@ -156,29 +157,43 @@ function ListingContent() {
 
   // Handle contact seller - show coming soon message
   const handleContactSeller = () => {
+    console.log('[Listing] Contact seller clicked');
     alert('💬 Messaging feature is coming soon!\n\nYou can contact the seller through their profile.');
   };
 
   // Handle buy now - show coming soon message
   const handleBuyNow = () => {
+    console.log('[Listing] Buy now clicked');
     alert('🛒 Checkout feature is coming soon!\n\nPlease contact the seller to arrange payment.');
   };
 
   // Handle view seller profile
   const handleViewSellerProfile = () => {
+    console.log('[Listing] View seller profile clicked, listing:', listing);
     if (listing?.user_id) {
-      window.location.href = `/seller?user_id=${listing.user_id}`;
+      console.log('[Listing] Navigating to seller page with user_id:', listing.user_id);
+      router.push(`/seller?user_id=${listing.user_id}`);
+    } else {
+      console.warn('[Listing] No user_id found in listing data');
+      alert('Could not find seller information');
     }
   };
 
   // Handle share - try native share or copy to clipboard
   const handleShare = async () => {
-    const url = window.location.href;
+    console.log('[Listing] Share clicked');
+    if (!listing?.model_name) {
+      console.warn('[Listing] No listing model_name found');
+      return;
+    }
+
+    const url = typeof window !== 'undefined' ? window.location.href : '';
     const text = `Check out this ${listing.model_name} on BikeMarket!`;
 
     // Try native share API first (mobile)
-    if (navigator.share) {
+    if (typeof window !== 'undefined' && navigator.share) {
       try {
+        console.log('[Listing] Using native share API');
         await navigator.share({
           title: listing.model_name,
           text: text,
@@ -186,22 +201,27 @@ function ListingContent() {
         });
         return;
       } catch (err) {
-        console.error('Share failed:', err);
+        console.error('[Listing] Share failed:', err);
       }
     }
 
     // Fallback to copy to clipboard
-    try {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      alert('Link copied to clipboard!');
-    } catch (err) {
-      alert('Failed to copy link');
-      console.error('Copy failed:', err);
+    if (typeof window !== 'undefined') {
+      try {
+        console.log('[Listing] Copying to clipboard');
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        alert('Link copied to clipboard!');
+      } catch (err) {
+        alert('Failed to copy link');
+        console.error('[Listing] Copy failed:', err);
+      }
     }
   };
 
   // Handle share on Facebook
   const handleShareFacebook = () => {
+    console.log('[Listing] Share Facebook clicked');
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
     window.open(facebookUrl, '_blank', 'width=600,height=400');
@@ -209,16 +229,20 @@ function ListingContent() {
 
   // Handle share on X (Twitter)
   const handleShareX = () => {
+    console.log('[Listing] Share X clicked');
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
-    const text = `Check out this ${listing.model_name} on BikeMarket!`;
+    const text = `Check out this ${listing?.model_name || 'bike'} on BikeMarket!`;
     const xUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     window.open(xUrl, '_blank', 'width=600,height=400');
   };
 
   // Handle share on WhatsApp
   const handleShareWhatsApp = () => {
+    console.log('[Listing] Share WhatsApp clicked');
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
-    const text = `Check out this ${listing.model_name} on BikeMarket! ${url}`;
+    const text = `Check out this ${listing?.model_name || 'bike'} on BikeMarket! ${url}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
   };
