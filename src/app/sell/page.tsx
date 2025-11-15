@@ -114,9 +114,15 @@ export default function SellPage() {
       console.log('Sending to:', apiUrl + '/listings');
 
       // Get auth token
+      console.log('[SellPage] About to get token from localStorage...');
+      console.log('[SellPage] All localStorage keys:', Object.keys(localStorage));
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      console.log('[SellPage] Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'NULL');
+
       if (!token) {
         console.log('❌ No token found - user may have been logged out');
+        console.log('[SellPage] localStorage.authToken:', localStorage.getItem('authToken'));
+        console.log('[SellPage] localStorage contents:', localStorage);
         setError(t('tokenNotFound'));
         setLoading(false);
         return;

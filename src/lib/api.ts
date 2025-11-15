@@ -17,6 +17,7 @@ class ApiClient {
   private loadToken(): void {
     if (typeof window !== 'undefined') {
       this.token = localStorage.getItem('authToken');
+      console.log('[API] loadToken: token from localStorage:', this.token ? `${this.token.substring(0, 20)}...` : 'NULL');
     }
   }
 
@@ -24,6 +25,8 @@ class ApiClient {
     this.token = token;
     if (typeof window !== 'undefined') {
       localStorage.setItem('authToken', token);
+      console.log('[API] setToken: saved to localStorage, token:', `${token.substring(0, 20)}...`);
+      console.log('[API] setToken: verified in localStorage:', localStorage.getItem('authToken') ? 'YES ✅' : 'NO ❌');
     }
   }
 
@@ -31,6 +34,7 @@ class ApiClient {
     this.token = null;
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
+      console.log('[API] clearToken: removed from localStorage');
     }
   }
 
