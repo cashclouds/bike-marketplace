@@ -16,7 +16,8 @@ const SAMPLE_LISTINGS = [
   { id: 6, brand: 'Canyon', model: 'Grail CF SL 7', year: 2023, price: 2900, location: 'Tallinn', condition: 'Excellent', category: 'Gravel Bike' },
 ];
 
-const CATEGORIES = ['All', 'Road Bikes', 'Mountain Bikes', 'Gravel Bikes', 'Components', 'Parts'];
+// Category keys that will be translated using t() function
+const CATEGORY_KEYS = ['all', 'roadBikes', 'mountainBikes', 'gravelBikes', 'components', 'parts'];
 const BRANDS = ['Trek', 'Giant', 'Specialized', 'Cannondale', 'Scott', 'Merida', 'Cube', 'Canyon', 'Orbea', 'Bianchi'];
 
 type SortOption = 'price_asc' | 'price_desc' | 'newest' | 'oldest';
@@ -282,12 +283,12 @@ export default function Home() {
           <section className="p-4 bg-white dark:bg-gray-800 rounded-lg">
             <h2 className="text-3xl font-bold mb-6 dark:text-white">{t('browse_categories') || 'Browse by Category'}</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {CATEGORIES.map(cat => (
+              {CATEGORY_KEYS.map(catKey => (
                 <button
-                  key={cat}
+                  key={catKey}
                   className="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg hover:border-blue-600 dark:hover:border-blue-400 transition-colors text-gray-800 dark:text-gray-200 font-medium"
                 >
-                  {cat}
+                  {t(catKey)}
                 </button>
               ))}
             </div>
