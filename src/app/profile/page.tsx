@@ -21,6 +21,7 @@ export default function ProfilePage() {
   const [userListings, setUserListings] = useState<any[]>([]);
   const [listingsLoading, setListingsLoading] = useState(false);
   const [listingsError, setListingsError] = useState<string | null>(null);
+  const [deletingListingId, setDeletingListingId] = useState<string | null>(null);
 
   // Load language
   useEffect(() => {
@@ -115,15 +116,23 @@ export default function ProfilePage() {
 
     try {
       console.log('[Profile] Deleting listing:', listingId);
-      await api.deleteListing(listingId);
-      console.log('[Profile] ✅ Listing deleted successfully');
+      setDeletingListingId(listingId);
+
+      const response = await api.deleteListing(listingId);
+      console.log('[Profile] ✅ Listing deleted successfully, response:', response);
+
       setMessage({ type: 'success', text: t('listingDeletedSuccessfully') || 'Listing deleted successfully' });
-      // Refresh listings
-      fetchUserListings();
+
+      // Remove from UI immediately
+      setUserListings(prev => prev.filter(l => l.id !== listingId));
+      setDeletingListingId(null);
     } catch (err) {
       const errorMsg = (err as any).message || 'Failed to delete listing';
       console.error('[Profile] ❌ Error deleting listing:', errorMsg);
+      console.error('[Profile] Full error object:', err);
+
       setMessage({ type: 'error', text: errorMsg });
+      setDeletingListingId(null);
     }
   };
 
@@ -446,9 +455,14 @@ export default function ProfilePage() {
                               </Link>
                               <button
                                 onClick={() => handleDeleteListing(listing.id)}
-                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded transition-colors"
+                                disabled={deletingListingId === listing.id}
+                                className={`px-4 py-2 text-white text-sm font-bold rounded transition-colors ${
+                                  deletingListingId === listing.id
+                                    ? 'bg-gray-400 cursor-not-allowed opacity-70'
+                                    : 'bg-red-600 hover:bg-red-700'
+                                }`}
                               >
-                                {t('delete') || 'Delete'}
+                                {deletingListingId === listing.id ? '⏳ ' + (t('deleting') || 'Deleting...') : t('delete') || 'Delete'}
                               </button>
                             </div>
                           </div>
