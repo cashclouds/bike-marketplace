@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Settings, { translations } from '@/components/Settings';
-import EditableBlock from '@/components/EditableBlock';
 import { useLayout } from '@/contexts/LayoutContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
@@ -279,10 +278,10 @@ export default function Home() {
       {/* Main Content */}
       <main className={`${showSearchResults ? 'hidden' : ''} max-w-7xl mx-auto px-4 py-12`}>
         {/* Categories Section */}
-        <EditableBlock id="section-categories" defaultWidth="100%">
-          <section className="mb-12 p-4 bg-white dark:bg-gray-800 rounded-lg h-full">
-            <h2 className="text-3xl font-bold mb-6 dark:text-white no-drag">{t('browse_categories') || 'Browse by Category'}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 no-drag">
+        <div className="mb-12">
+          <section className="p-4 bg-white dark:bg-gray-800 rounded-lg">
+            <h2 className="text-3xl font-bold mb-6 dark:text-white">{t('browse_categories') || 'Browse by Category'}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat}
@@ -293,13 +292,13 @@ export default function Home() {
               ))}
             </div>
           </section>
-        </EditableBlock>
+        </div>
 
         {/* Brands Section */}
-        <EditableBlock id="section-brands" defaultWidth="100%">
-          <section className="mb-12 p-4 bg-white dark:bg-gray-800 rounded-lg h-full">
-            <h2 className="text-3xl font-bold mb-6 dark:text-white no-drag">{t('popular_brands') || 'Popular Brands'}</h2>
-            <div className="flex flex-wrap gap-4 no-drag">
+        <div className="mb-12">
+          <section className="p-4 bg-white dark:bg-gray-800 rounded-lg">
+            <h2 className="text-3xl font-bold mb-6 dark:text-white">{t('popular_brands') || 'Popular Brands'}</h2>
+            <div className="flex flex-wrap gap-4">
               {BRANDS.map(brand => (
                 <button
                   key={brand}
@@ -310,12 +309,12 @@ export default function Home() {
               ))}
             </div>
           </section>
-        </EditableBlock>
+        </div>
 
         {/* Latest Listings */}
-        <EditableBlock id="section-listings" defaultWidth="100%">
-          <section className="p-4 bg-white dark:bg-gray-800 rounded-lg h-full">
-            <div className="flex justify-between items-center mb-6 no-drag">
+        <div className="mb-12">
+          <section className="p-4 bg-white dark:bg-gray-800 rounded-lg">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-3xl font-bold dark:text-white">{t('latest_listings') || 'Latest Listings'}</h2>
               <Link href="/catalog" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                 {t('view_all') || 'View all'} →
@@ -341,13 +340,13 @@ export default function Home() {
               ))}
             </div>
           </section>
-        </EditableBlock>
+        </div>
 
         {/* How It Works */}
-        <EditableBlock id="section-howitworks" defaultWidth="100%">
-          <section className="mt-12 py-12 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg h-full">
-            <h2 className="text-3xl font-bold mb-8 text-center dark:text-white no-drag">{t('how_it_works') || 'How It Works'}</h2>
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto no-drag">
+        <div className="mt-12 mb-12">
+          <section className="py-12 px-4 bg-blue-50 dark:bg-gray-800 rounded-lg">
+            <h2 className="text-3xl font-bold mb-8 text-center dark:text-white">{t('how_it_works') || 'How It Works'}</h2>
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center">
                 <div className="text-5xl mb-4">🔍</div>
                 <h3 className="font-bold text-lg mb-2 dark:text-white">1. {t('search') || 'Search'}</h3>
@@ -365,7 +364,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-        </EditableBlock>
+        </div>
       </main>
 
       {/* Footer */}
