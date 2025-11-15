@@ -407,7 +407,7 @@ export default function ProfilePage() {
                         href="/sell"
                         className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg"
                       >
-                        {t('createYourFirst') || 'Create your first!'} →
+                        {t('createYourFirst') || 'Create Your First →'}
                       </Link>
                     </div>
                   ) : (
