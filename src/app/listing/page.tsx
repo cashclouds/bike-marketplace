@@ -79,6 +79,14 @@ function ListingContent() {
     return t(typeMap[type.toLowerCase()] || type);
   };
 
+  // Format seller name (e.g., "Sergei Martonov" → "Sergei M.")
+  const formatSellerName = (fullName: string): string => {
+    if (!fullName) return 'Anonymous';
+    const parts = fullName.trim().split(' ');
+    if (parts.length === 1) return parts[0];
+    return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`;
+  };
+
   // Load listing
   useEffect(() => {
     if (!listingId) {
@@ -121,6 +129,59 @@ function ListingContent() {
 
     localStorage.setItem('favorites', JSON.stringify(favList));
     setIsFavorited(!isFavorited);
+  };
+
+  // Handle contact seller - redirect to messages
+  const handleContactSeller = () => {
+    if (!isAuthenticated) {
+      alert('Please login to contact seller');
+      return;
+    }
+    // Redirect to messages page with seller user_id
+    window.location.href = `/messages?seller_id=${listing.user_id}`;
+  };
+
+  // Handle buy now - redirect to checkout
+  const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      alert('Please login to buy');
+      return;
+    }
+    // Redirect to checkout with listing_id
+    window.location.href = `/checkout?listing_id=${listingId}`;
+  };
+
+  // Handle share on Facebook
+  const handleShareFacebook = () => {
+    const url = window.location.href;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Handle share on X (Twitter)
+  const handleShareX = () => {
+    const url = window.location.href;
+    const text = `Check out this ${listing.model_name} on BikeMarket!`;
+    const xUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    window.open(xUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Handle share on WhatsApp
+  const handleShareWhatsApp = () => {
+    const url = window.location.href;
+    const text = `Check out this ${listing.model_name} on BikeMarket! ${url}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  // Handle copy to clipboard
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
   };
 
   // Navigate to previous photo
@@ -378,7 +439,7 @@ function ListingContent() {
                     👤
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{listing.seller_name || 'Anonymous'}</p>
+                    <p className="font-semibold text-gray-900">{formatSellerName(listing.seller_name)}</p>
                     <p className="text-sm text-gray-500">⭐ 4.8 (42 reviews)</p>
                   </div>
                 </div>
@@ -389,7 +450,10 @@ function ListingContent() {
 
               {/* Action Buttons */}
               <div className="bg-white rounded-lg shadow-md p-6 space-y-3">
-                <button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <button
+                  onClick={handleContactSeller}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
                   💬 {t('contactSeller')}
                 </button>
                 <button
@@ -403,7 +467,10 @@ function ListingContent() {
                   {isFavorited ? `❤️ ${t('favorited')}` : `🤍 ${t('addToFavorites')}`}
                 </button>
                 {isAuthenticated && user?.user_type === 'individual' && (
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                  <button
+                    onClick={handleBuyNow}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
                     🛒 {t('buyNow')}
                   </button>
                 )}
@@ -413,14 +480,33 @@ function ListingContent() {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-3">{t('share')}</h3>
                 <div className="flex gap-2">
-                  <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm">
+                  <button
+                    onClick={handleShareFacebook}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
+                    title="Share on Facebook"
+                  >
                     f
                   </button>
-                  <button className="flex-1 bg-sky-400 hover:bg-sky-500 text-white py-2 rounded-lg text-sm">
+                  <button
+                    onClick={handleShareX}
+                    className="flex-1 bg-sky-400 hover:bg-sky-500 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
+                    title="Share on X"
+                  >
                     𝕏
                   </button>
-                  <button className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
+                  <button
+                    onClick={handleShareWhatsApp}
+                    className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
+                    title="Share on WhatsApp"
+                  >
                     WhatsApp
+                  </button>
+                  <button
+                    onClick={handleCopyLink}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
+                    title="Copy link"
+                  >
+                    🔗
                   </button>
                 </div>
               </div>
