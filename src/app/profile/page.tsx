@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
+import { getImageUrl } from '@/lib/imageUrl';
 import Settings, { translations } from '@/components/Settings';
 
 export default function ProfilePage() {
@@ -17,6 +18,9 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeTab, setActiveTab] = useState('info');
+  const [userListings, setUserListings] = useState<any[]>([]);
+  const [listingsLoading, setListingsLoading] = useState(false);
+  const [listingsError, setListingsError] = useState<string | null>(null);
 
   // Load language
   useEffect(() => {
@@ -50,6 +54,78 @@ export default function ProfilePage() {
     }
     setLoading(false);
   }, [isAuthenticated, user, router]);
+
+  // Fetch user listings when activeTab changes to 'listings'
+  useEffect(() => {
+    if (activeTab === 'listings' && isAuthenticated) {
+      fetchUserListings();
+    }
+  }, [activeTab, isAuthenticated]);
+
+  const fetchUserListings = async () => {
+    try {
+      console.log('[Profile] Starting to fetch user listings...');
+      setListingsLoading(true);
+      setListingsError(null);
+
+      // Get auth token from localStorage
+      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      console.log('[Profile] Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'NULL');
+
+      if (!token) {
+        console.log('[Profile] ❌ No token found!');
+        setListingsError('Not authenticated');
+        setListingsLoading(false);
+        return;
+      }
+
+      console.log('[Profile] ✅ Token found, fetching listings...');
+
+      // Try fetching all listings first to see user_id relationships
+      const response = (await api.getListings({ limit: 100 })) as any;
+      console.log('[Profile] API Response:', response);
+
+      const allListings = response.listings || [];
+      console.log('[Profile] All listings received:', allListings.length);
+      console.log('[Profile] Current user ID:', user?.id);
+
+      // Filter listings by user_id
+      const myListings = allListings.filter((listing: any) => {
+        console.log('[Profile] Checking listing:', listing.id, 'user_id:', listing.user_id, 'matches:', listing.user_id === user?.id);
+        return listing.user_id === user?.id;
+      });
+
+      console.log('[Profile] Filtered user listings:', myListings.length);
+      setUserListings(myListings);
+    } catch (err) {
+      const errorMsg = (err as any).message || 'Failed to fetch listings';
+      console.error('[Profile] ❌ Error fetching listings:', errorMsg);
+      console.error('[Profile] Full error:', err);
+      setListingsError(errorMsg);
+      setUserListings([]);
+    } finally {
+      setListingsLoading(false);
+    }
+  };
+
+  const handleDeleteListing = async (listingId: string) => {
+    if (!window.confirm(t('confirmDelete') || 'Are you sure you want to delete this listing?')) {
+      return;
+    }
+
+    try {
+      console.log('[Profile] Deleting listing:', listingId);
+      await api.deleteListing(listingId);
+      console.log('[Profile] ✅ Listing deleted successfully');
+      setMessage({ type: 'success', text: t('listingDeletedSuccessfully') || 'Listing deleted successfully' });
+      // Refresh listings
+      fetchUserListings();
+    } catch (err) {
+      const errorMsg = (err as any).message || 'Failed to delete listing';
+      console.error('[Profile] ❌ Error deleting listing:', errorMsg);
+      setMessage({ type: 'error', text: errorMsg });
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -300,9 +376,86 @@ export default function ProfilePage() {
                       {t('createNewListing') || 'Create New Listing'}
                     </Link>
                   </div>
-                  <div className="text-center py-12 bg-gray-100 rounded-lg">
-                    <p className="text-gray-600">{t('noListingsYet') || "You don't have any listings yet"}</p>
-                  </div>
+
+                  {listingsError && (
+                    <div className="mb-4 p-4 bg-red-100 text-red-700 border border-red-400 rounded-lg">
+                      {listingsError}
+                    </div>
+                  )}
+
+                  {listingsLoading ? (
+                    <div className="text-center py-12 bg-gray-100 rounded-lg">
+                      <p className="text-gray-600">{t('loading') || 'Loading listings...'}</p>
+                    </div>
+                  ) : userListings.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-100 rounded-lg">
+                      <p className="text-gray-600 mb-4">{t('noListingsYet') || "You don't have any listings yet"}</p>
+                      <Link
+                        href="/sell"
+                        className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg"
+                      >
+                        {t('createYourFirst') || 'Create your first!'} →
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {userListings.map((listing: any) => {
+                        const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos || [];
+                        const firstPhoto = photos.length > 0 ? photos[0] : null;
+
+                        return (
+                          <div key={listing.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex">
+                            {/* Thumbnail */}
+                            <div className="w-32 h-32 bg-gray-200 flex-shrink-0">
+                              {firstPhoto ? (
+                                <img
+                                  src={getImageUrl(firstPhoto.url)}
+                                  alt={listing.model_name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-3xl">🚴</div>
+                              )}
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 p-4 flex flex-col justify-between">
+                              <div>
+                                <h3 className="text-lg font-bold text-gray-900">{listing.model_name}</h3>
+                                <p className="text-sm text-gray-600 mt-1">
+                                  {listing.year} • {listing.condition} • {listing.location}
+                                </p>
+                                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{listing.description}</p>
+                              </div>
+                              <div className="text-2xl font-bold text-blue-600 mt-2">€{listing.price}</div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="px-4 py-4 flex flex-col justify-center gap-2">
+                              <Link
+                                href={`/listing?id=${listing.id}`}
+                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded transition-colors text-center"
+                              >
+                                {t('view') || 'View'}
+                              </Link>
+                              <Link
+                                href={`/sell?edit=${listing.id}`}
+                                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded transition-colors text-center"
+                              >
+                                {t('edit') || 'Edit'}
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteListing(listing.id)}
+                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded transition-colors"
+                              >
+                                {t('delete') || 'Delete'}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
 
