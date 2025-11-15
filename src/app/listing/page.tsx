@@ -17,6 +17,8 @@ function ListingContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [favoriteError, setFavoriteError] = useState<string | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [lang, setLang] = useState('');
   const [langLoaded, setLangLoaded] = useState(false);
@@ -117,38 +119,90 @@ function ListingContent() {
     fetchListing();
   }, [listingId]);
 
-  const handleFavorite = () => {
-    const favorites = localStorage.getItem('favorites') || '[]';
-    let favList = JSON.parse(favorites);
-
-    if (isFavorited) {
-      favList = favList.filter((id: string) => id !== listingId);
-    } else {
-      favList.push(listingId);
+  const handleFavorite = async () => {
+    if (!isAuthenticated) {
+      alert('Please login to add to favorites');
+      return;
     }
 
-    localStorage.setItem('favorites', JSON.stringify(favList));
-    setIsFavorited(!isFavorited);
+    try {
+      setFavoriteLoading(true);
+      setFavoriteError(null);
+
+      if (isFavorited) {
+        // Remove from favorites
+        // Note: favorites API endpoint not yet implemented
+        // For now, just use localStorage
+        const favorites = localStorage.getItem('favorites') || '[]';
+        let favList = JSON.parse(favorites);
+        favList = favList.filter((id: string) => id !== listingId);
+        localStorage.setItem('favorites', JSON.stringify(favList));
+      } else {
+        // Add to favorites
+        // Note: favorites API endpoint not yet implemented
+        // For now, just use localStorage
+        const favorites = localStorage.getItem('favorites') || '[]';
+        let favList = JSON.parse(favorites);
+        if (!favList.includes(listingId)) {
+          favList.push(listingId);
+        }
+        localStorage.setItem('favorites', JSON.stringify(favList));
+      }
+
+      setIsFavorited(!isFavorited);
+    } catch (err) {
+      const errorMsg = (err as any).message || 'Failed to update favorites';
+      console.error('Favorite error:', errorMsg);
+      setFavoriteError(errorMsg);
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
-  // Handle contact seller - redirect to messages
+  // Handle contact seller - show coming soon message
   const handleContactSeller = () => {
-    if (!isAuthenticated) {
-      alert('Please login to contact seller');
-      return;
-    }
-    // Redirect to messages page with seller user_id
-    window.location.href = `/messages?seller_id=${listing.user_id}`;
+    alert('💬 Messaging feature is coming soon!\n\nYou can contact the seller through their profile.');
   };
 
-  // Handle buy now - redirect to checkout
+  // Handle buy now - show coming soon message
   const handleBuyNow = () => {
-    if (!isAuthenticated) {
-      alert('Please login to buy');
-      return;
+    alert('🛒 Checkout feature is coming soon!\n\nPlease contact the seller to arrange payment.');
+  };
+
+  // Handle view seller profile
+  const handleViewSellerProfile = () => {
+    if (listing?.user_id) {
+      window.location.href = `/seller?user_id=${listing.user_id}`;
     }
-    // Redirect to checkout with listing_id
-    window.location.href = `/checkout?listing_id=${listingId}`;
+  };
+
+  // Handle share - try native share or copy to clipboard
+  const handleShare = async () => {
+    const url = window.location.href;
+    const text = `Check out this ${listing.model_name} on BikeMarket!`;
+
+    // Try native share API first (mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: listing.model_name,
+          text: text,
+          url: url,
+        });
+        return;
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    }
+
+    // Fallback to copy to clipboard
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      alert('Link copied to clipboard!');
+    } catch (err) {
+      alert('Failed to copy link');
+      console.error('Copy failed:', err);
+    }
   };
 
   // Handle share on Facebook
@@ -172,16 +226,6 @@ function ListingContent() {
     const text = `Check out this ${listing.model_name} on BikeMarket! ${url}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
-  };
-
-  // Handle copy to clipboard
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
   };
 
   // Navigate to previous photo
@@ -443,7 +487,10 @@ function ListingContent() {
                     <p className="text-sm text-gray-500">⭐ 4.8 (42 reviews)</p>
                   </div>
                 </div>
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors mb-2">
+                <button
+                  onClick={handleViewSellerProfile}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors mb-2"
+                >
                   {t('viewSellerProfile')}
                 </button>
               </div>
@@ -456,16 +503,24 @@ function ListingContent() {
                 >
                   💬 {t('contactSeller')}
                 </button>
-                <button
-                  onClick={handleFavorite}
-                  className={`w-full font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
-                    isFavorited
-                      ? 'bg-red-600 hover:bg-red-700 text-white'
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                  }`}
-                >
-                  {isFavorited ? `❤️ ${t('favorited')}` : `🤍 ${t('addToFavorites')}`}
-                </button>
+                <div>
+                  <button
+                    onClick={handleFavorite}
+                    disabled={favoriteLoading}
+                    className={`w-full font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                      favoriteLoading
+                        ? 'bg-gray-400 cursor-not-allowed opacity-70'
+                        : isFavorited
+                        ? 'bg-red-600 hover:bg-red-700 text-white'
+                        : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                    }`}
+                  >
+                    {favoriteLoading ? '⏳ ' : isFavorited ? `❤️ ${t('favorited')}` : `🤍 ${t('addToFavorites')}`}
+                  </button>
+                  {favoriteError && (
+                    <p className="text-red-600 text-sm mt-2">{favoriteError}</p>
+                  )}
+                </div>
                 {isAuthenticated && user?.user_type === 'individual' && (
                   <button
                     onClick={handleBuyNow}
@@ -480,6 +535,13 @@ function ListingContent() {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-3">{t('share')}</h3>
                 <div className="flex gap-2">
+                  <button
+                    onClick={handleShare}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
+                    title="Share"
+                  >
+                    📤 {t('share') || 'Share'}
+                  </button>
                   <button
                     onClick={handleShareFacebook}
                     className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
@@ -499,14 +561,7 @@ function ListingContent() {
                     className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
                     title="Share on WhatsApp"
                   >
-                    WhatsApp
-                  </button>
-                  <button
-                    onClick={handleCopyLink}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
-                    title="Copy link"
-                  >
-                    🔗
+                    💬
                   </button>
                 </div>
               </div>
