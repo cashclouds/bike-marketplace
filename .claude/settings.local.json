@@ -35,7 +35,10 @@
       "Bash(kill:*)",
       "Bash(timeout 30 git push:*)",
       "Bash(echo:*)",
-      "WebFetch(domain:www.auto24.ee)"
+      "WebFetch(domain:www.auto24.ee)",
+      "WebFetch(domain:bike-marketplace-rho.vercel.app)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

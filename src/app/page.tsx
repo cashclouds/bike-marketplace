@@ -7,14 +7,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUrl';
 
-const SAMPLE_LISTINGS = [
-  { id: 1, brand: 'Trek', model: 'Domane SL 5', year: 2023, price: 2500, location: 'Tallinn', condition: 'Excellent', category: 'Road Bike' },
-  { id: 2, brand: 'Giant', model: 'TCR Advanced', year: 2024, price: 3200, location: 'Tartu', condition: 'New', category: 'Road Bike' },
-  { id: 3, brand: 'Specialized', model: 'Stumpjumper', year: 2022, price: 2800, location: 'Tallinn', condition: 'Good', category: 'Mountain Bike' },
-  { id: 4, brand: 'Cannondale', model: 'SuperSix EVO', year: 2023, price: 4500, location: 'Parnu', condition: 'Excellent', category: 'Road Bike' },
-  { id: 5, brand: 'Scott', model: 'Spark RC 900', year: 2024, price: 5200, location: 'Tallinn', condition: 'New', category: 'Mountain Bike' },
-  { id: 6, brand: 'Canyon', model: 'Grail CF SL 7', year: 2023, price: 2900, location: 'Tallinn', condition: 'Excellent', category: 'Gravel Bike' },
-];
 
 // Category keys that will be translated using t() function
 const CATEGORY_KEYS = ['all', 'roadBikes', 'mountainBikes', 'gravelBikes', 'components', 'parts'];
@@ -32,6 +24,9 @@ export default function Home() {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('price_asc');
+  const [latestListings, setLatestListings] = useState<any[]>([]);
+  const [listingsLoading, setListingsLoading] = useState(true);
+  const [listingsError, setListingsError] = useState<string | null>(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('lang') || 'en';
@@ -45,6 +40,25 @@ export default function Home() {
 
     window.addEventListener('languageChange', handleLangChange);
     return () => window.removeEventListener('languageChange', handleLangChange);
+  }, []);
+
+  // Fetch latest listings
+  useEffect(() => {
+    const fetchLatestListings = async () => {
+      try {
+        setListingsLoading(true);
+        const response = (await api.getListings({ limit: 8 })) as any;
+        setLatestListings(response.listings || []);
+        setListingsError(null);
+      } catch (err) {
+        console.error('Error fetching latest listings:', err);
+        setListingsError((err as any).message || 'Failed to load listings');
+        setLatestListings([]);
+      } finally {
+        setListingsLoading(false);
+      }
+    };
+    fetchLatestListings();
   }, []);
 
   const t = (key: string) => {
@@ -321,25 +335,51 @@ export default function Home() {
                 {t('view_all') || 'View all'} →
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 no-drag">
-              {SAMPLE_LISTINGS.slice(0, 4).map(listing => (
-                <div
-                  key={listing.id}
-                  onClick={() => setSelectedListing(listing)}
-                  className="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer overflow-hidden border dark:border-gray-600"
-                >
-                  <div className="bg-gray-200 dark:bg-gray-600 h-40 flex items-center justify-center text-5xl">🚴</div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg dark:text-white">{listing.brand} {listing.model}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{listing.year} • {listing.condition}</p>
-                    <div className="flex justify-between items-center mt-3">
-                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">€{listing.price}</span>
-                      <span className="text-sm text-gray-500 dark:text-gray-500">{listing.location}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+
+            {listingsLoading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">{t('loading') || 'Loading listings...'}</p>
+              </div>
+            ) : latestListings.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">{t('no_listings_yet') || 'No listings yet. Create first!'}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {latestListings.slice(0, 8).map(listing => {
+                  const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos || [];
+                  const firstPhoto = photos.length > 0 ? photos[0] : null;
+
+                  return (
+                    <Link
+                      key={listing.id}
+                      href={`/listing?id=${listing.id}`}
+                      className="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden border dark:border-gray-600"
+                    >
+                      {firstPhoto ? (
+                        <div className="relative bg-gray-200 h-40 overflow-hidden">
+                          <img
+                            src={getImageUrl(firstPhoto.url)}
+                            alt={listing.model_name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-gray-200 dark:bg-gray-600 h-40 flex items-center justify-center text-5xl">🚴</div>
+                      )}
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg dark:text-white">{listing.model_name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{listing.year} • {listing.condition}</p>
+                        <div className="flex justify-between items-center mt-3">
+                          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">€{listing.price}</span>
+                          <span className="text-sm text-gray-500 dark:text-gray-500">{listing.location}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </section>
         </div>
 
