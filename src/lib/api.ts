@@ -55,8 +55,23 @@ class ApiClient {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: response.statusText }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      let errorMessage = response.statusText;
+      try {
+        const errorData = await response.json();
+        console.error('[API] Error response data:', errorData);
+        errorMessage = errorData.error || errorData.message || errorData.details || response.statusText;
+      } catch (e) {
+        // Try to get text if JSON parsing fails
+        try {
+          const errorText = await response.text();
+          console.error('[API] Error response text:', errorText);
+          if (errorText) errorMessage = errorText;
+        } catch (e2) {
+          console.error('[API] Could not parse error response');
+        }
+      }
+      console.error(`[API] HTTP ${response.status}: ${errorMessage}`);
+      throw new Error(`HTTP ${response.status}: ${errorMessage}`);
     }
     return response.json();
   }

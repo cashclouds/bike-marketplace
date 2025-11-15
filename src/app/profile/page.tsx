@@ -116,6 +116,9 @@ export default function ProfilePage() {
 
     try {
       console.log('[Profile] Deleting listing:', listingId);
+      console.log('[Profile] API URL will be:', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api');
+      console.log('[Profile] Full DELETE URL:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/listings/${listingId}`);
+
       setDeletingListingId(listingId);
 
       const response = await api.deleteListing(listingId);
@@ -130,8 +133,9 @@ export default function ProfilePage() {
       const errorMsg = (err as any).message || 'Failed to delete listing';
       console.error('[Profile] ❌ Error deleting listing:', errorMsg);
       console.error('[Profile] Full error object:', err);
+      console.error('[Profile] Error stack:', (err as any).stack);
 
-      setMessage({ type: 'error', text: errorMsg });
+      setMessage({ type: 'error', text: `❌ ${errorMsg}` });
       setDeletingListingId(null);
     }
   };
