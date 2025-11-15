@@ -69,8 +69,11 @@ class ApiClient {
       body: JSON.stringify({ email, password, name, user_type: userType, phone }),
     });
     const data = (await this.handleResponse(response)) as any;
-    if (data.token) {
-      this.setToken(data.token);
+    // Backend returns accessToken, not token
+    const token = data.accessToken || data.token;
+    if (token) {
+      this.setToken(token);
+      console.log('[API] registerUser: saved token to localStorage');
     }
     return data;
   }
@@ -82,8 +85,11 @@ class ApiClient {
       body: JSON.stringify({ email, password }),
     });
     const data = (await this.handleResponse(response)) as any;
-    if (data.token) {
-      this.setToken(data.token);
+    // Backend returns accessToken, not token
+    const token = data.accessToken || data.token;
+    if (token) {
+      this.setToken(token);
+      console.log('[API] loginUser: saved token to localStorage');
     }
     return data;
   }
