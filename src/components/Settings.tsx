@@ -66,19 +66,14 @@ const translations = {
     back: 'Back',
     publish: 'Publish',
     logout: 'Logout',
-    accountType: 'Account Type',
     memberSince: 'Member since',
     personalInfo: 'Personal Info',
-    myListings: 'My Listings',
     favorites: 'Favorites',
     messages: 'Messages',
     personalInformation: 'Personal Information',
-    fullName: 'Full Name',
     email: 'Email',
-    phone: 'Phone',
     notProvided: 'Not provided',
     editProfile: 'Edit Profile',
-    createNewListing: 'Create New Listing',
     noListingsYet: "You don't have any listings yet",
     favoritedListings: 'Favorited Listings',
     noFavoritesYet: "You haven't favorited any listings yet",
@@ -150,7 +145,6 @@ const translations = {
     damaged: 'Damaged',
     road: 'Road Bike',
     mountain_bike: 'Mountain Bike',
-    gravel: 'Gravel Bike',
     hybrid: 'Hybrid',
     bmx: 'BMX',
     kids: 'Kids',
@@ -173,9 +167,6 @@ const translations = {
     xlExtraLarge: 'XL (Extra Large)',
     xxl2xl: 'XXL (2XL)',
     like_new: 'Like New',
-    roadBikes: 'Road Bikes',
-    mountainBikes: 'Mountain Bikes',
-    gravelBikes: 'Gravel Bikes',
     newListings: '✨ New',
     allBikes: '↺ All Bikes',
     noListingsFound: 'No listings found. Try adjusting your filters.',
@@ -258,9 +249,9 @@ const translations = {
     searchPlaceholder: 'Otsi jalgrattaid, kaubamarke, mudeleid...',
     browseCategory: 'Sirvi kategooriate kaupa',
     all: 'Kõik',
-    roadBikes: 'Maanteejalgratad',
+    roadBikes: 'Maantee jalgratad',
     mountain: 'Mägijalgrattad',
-    gravel: 'Kruusjalgratad',
+    gravel: 'Kruusjalgratas',
     components: 'Komponendid',
     parts: 'Varuosad',
     popularBrands: 'Populaarsed kaubamärgid',
@@ -300,19 +291,14 @@ const translations = {
     back: 'Tagasi',
     publish: 'Avalda',
     logout: 'Välja logimine',
-    accountType: 'Konto tüüp',
     memberSince: 'Liige alates',
     personalInfo: 'Isiklik teave',
-    myListings: 'Minu kuulutused',
     favorites: 'Lemmikud',
     messages: 'Sõnumid',
     personalInformation: 'Isiklik teave',
-    fullName: 'Täisnimi',
     email: 'E-post',
-    phone: 'Telefon',
     notProvided: 'Pole antud',
     editProfile: 'Muuda profiili',
-    createNewListing: 'Loo uus kuulutus',
     noListingsYet: 'Teil pole veel ühtegi kuulutust',
     favoritedListings: 'Märgitud kuulutused',
     noFavoritesYet: 'Te pole veel ühtegi kuulutust märginud',
@@ -384,7 +370,6 @@ const translations = {
     damaged: 'Kahjustatud',
     road: 'Maanteejalgratas',
     mountain_bike: 'Mägijalgratas',
-    gravel: 'Kruusjalgratas',
     hybrid: 'Hübriid',
     bmx: 'BMX',
     kids: 'Laste',
@@ -407,7 +392,6 @@ const translations = {
     xlExtraLarge: 'XL (Väga suur)',
     xxl2xl: 'XXL (2XL)',
     like_new: 'Nagu uus',
-    roadBikes: 'Maantee jalgratad',
     mountainBikes: 'Mägi jalgratad',
     gravelBikes: 'Kruus jalgratad',
     newListings: '✨ Uus',
@@ -494,7 +478,7 @@ const translations = {
     all: 'Все',
     roadBikes: 'Шоссейные',
     mountain: 'Горные',
-    gravel: 'Гравийные',
+    gravel: 'Гравийный',
     components: 'Компоненты',
     parts: 'Запчасти',
     popularBrands: 'Популярные бренды',
@@ -534,19 +518,14 @@ const translations = {
     back: 'Назад',
     publish: 'Опубликовать',
     logout: 'Выход',
-    accountType: 'Тип аккаунта',
     memberSince: 'Участник с',
     personalInfo: 'Личная информация',
-    myListings: 'Мои объявления',
     favorites: 'Избранное',
     messages: 'Сообщения',
     personalInformation: 'Личная информация',
-    fullName: 'Полное имя',
     email: 'Email',
-    phone: 'Телефон',
     notProvided: 'Не предоставлено',
     editProfile: 'Редактировать профиль',
-    createNewListing: 'Создать объявление',
     noListingsYet: 'У вас пока нет объявлений',
     favoritedListings: 'Избранные объявления',
     noFavoritesYet: 'Вы ещё не добавили объявления в избранное',
@@ -618,7 +597,6 @@ const translations = {
     damaged: 'Повреждённый',
     road: 'Шоссейный',
     mountain_bike: 'Горный',
-    gravel: 'Гравийный',
     hybrid: 'Гибрид',
     bmx: 'BMX',
     kids: 'Детский',
@@ -641,7 +619,6 @@ const translations = {
     xlExtraLarge: 'XL (Очень большой)',
     xxl2xl: 'XXL (2XL)',
     like_new: 'Как новый',
-    roadBikes: 'Шоссейные',
     mountainBikes: 'Горные',
     gravelBikes: 'Гравийные',
     newListings: '✨ Новое',
@@ -728,7 +705,7 @@ const translations = {
     all: 'Visi',
     roadBikes: 'Kelių dviračiai',
     mountain: 'Kalnų dviračiai',
-    gravel: 'Žvyro dviračiai',
+    gravel: 'Žvyro dviratis',
     components: 'Komponentai',
     parts: 'Dalys',
     popularBrands: 'Populiarios markos',
@@ -768,19 +745,14 @@ const translations = {
     back: 'Atgal',
     publish: 'Publikuoti',
     logout: 'Atsijungti',
-    accountType: 'Paskyros tipas',
     memberSince: 'Narys nuo',
     personalInfo: 'Asmeninė informacija',
-    myListings: 'Mano skelbimi',
     favorites: 'Mėgiamiausi',
     messages: 'Žinutės',
     personalInformation: 'Asmeninė informacija',
-    fullName: 'Pilnas vardas',
     email: 'El. paštas',
-    phone: 'Telefonas',
     notProvided: 'Nepateikta',
     editProfile: 'Redaguoti profilį',
-    createNewListing: 'Sukurti naują skelbimą',
     noListingsYet: 'Dar neturite jokių skelbimų',
     favoritedListings: 'Mėgiami skelbimi',
     noFavoritesYet: 'Dar nepažymėjote jokių skelbimų',
@@ -852,7 +824,6 @@ const translations = {
     damaged: 'Pažeistas',
     road: 'Kelių dviratis',
     mountain_bike: 'Kalnų dviratis',
-    gravel: 'Žvyro dviratis',
     hybrid: 'Hibridinis',
     bmx: 'BMX',
     kids: 'Vaikams',
@@ -875,7 +846,6 @@ const translations = {
     xlExtraLarge: 'XL (Labai didelis)',
     xxl2xl: 'XXL (2XL)',
     like_new: 'Beveik naujas',
-    roadBikes: 'Kelių dviračiai',
     mountainBikes: 'Kalnų dviračiai',
     gravelBikes: 'Žvyro dviračiai',
     newListings: '✨ Naujas',
@@ -960,9 +930,9 @@ const translations = {
     searchPlaceholder: 'Meklēt velosipēdus, zīmolus, modeļus...',
     browseCategory: 'Pārlūkot pēc kategorijas',
     all: 'Visi',
-    roadBikes: 'Šosejas velosipēdi',
+    roadBikes: 'Ceļu velosipēdi',
     mountain: 'Kalnu velosipēdi',
-    gravel: 'Grants velosipēdi',
+    gravel: 'Grants velosipēds',
     components: 'Komponenti',
     parts: 'Daļas',
     popularBrands: 'Populāras markas',
@@ -1002,19 +972,14 @@ const translations = {
     back: 'Atpakaļ',
     publish: 'Publicēt',
     logout: 'Izrakstīties',
-    accountType: 'Konta veids',
     memberSince: 'Biedrs kopš',
     personalInfo: 'Personīgā informācija',
-    myListings: 'Mani sludinājumi',
     favorites: 'Favorīti',
     messages: 'Ziņojumi',
     personalInformation: 'Personīgā informācija',
-    fullName: 'Pilnais vārds',
     email: 'E-pasts',
-    phone: 'Tālrunis',
     notProvided: 'Nav norādīts',
     editProfile: 'Rediģēt profilu',
-    createNewListing: 'Izveidot jaunu sludinājumu',
     noListingsYet: 'Vēl nav neviena sludinājuma',
     favoritedListings: 'Iecienītie sludinājumi',
     noFavoritesYet: 'Vēl neesi atzīmējis nevienu sludinājumu',
@@ -1086,7 +1051,6 @@ const translations = {
     damaged: 'Bojāts',
     road: 'Ceļu velosipēds',
     mountain_bike: 'Kalnu velosipēds',
-    gravel: 'Grants velosipēds',
     hybrid: 'Hibrīds',
     bmx: 'BMX',
     kids: 'Bērniem',
@@ -1109,7 +1073,6 @@ const translations = {
     xlExtraLarge: 'XL (Ļoti liels)',
     xxl2xl: 'XXL (2XL)',
     like_new: 'Kā jauns',
-    roadBikes: 'Ceļu velosipēdi',
     mountainBikes: 'Kalnu velosipēdi',
     gravelBikes: 'Grants velosipēdi',
     newListings: '✨ Jauns',
@@ -1229,7 +1192,7 @@ export default function Settings() {
         className="p-2 text-xl hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg font-bold border-2 border-gray-300 hover:border-blue-500"
         title={t('settings')}
       >
-        
+
       </button>
 
       {open && (
@@ -1262,8 +1225,8 @@ export default function Settings() {
                 <button
                   onClick={() => changeTheme('light')}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
-                    theme === 'light' 
-                      ? 'bg-blue-600 text-white border-blue-600' 
+                    theme === 'light'
+                      ? 'bg-blue-600 text-white border-blue-600'
                       : 'border-gray-300 hover:border-blue-400 dark:border-gray-600 dark:text-gray-200'
                   }`}
                 >
@@ -1272,8 +1235,8 @@ export default function Settings() {
                 <button
                   onClick={() => changeTheme('dark')}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
-                    theme === 'dark' 
-                      ? 'bg-blue-600 text-white border-blue-600' 
+                    theme === 'dark'
+                      ? 'bg-blue-600 text-white border-blue-600'
                       : 'border-gray-300 hover:border-blue-400 dark:border-gray-600 dark:text-gray-200'
                   }`}
                 >
@@ -1297,8 +1260,8 @@ export default function Settings() {
               <button
                 onClick={() => { toggleEditMode(); setOpen(false); }}
                 className={`w-full px-4 py-3 rounded-lg font-medium mb-2 transition-all ${
-                  editMode 
-                    ? 'bg-green-600 text-white hover:bg-green-700' 
+                  editMode
+                    ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-gray-200 dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
