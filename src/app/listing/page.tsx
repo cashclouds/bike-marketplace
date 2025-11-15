@@ -125,28 +125,21 @@ function ListingContent() {
       return;
     }
 
+    if (!listingId) {
+      alert('Invalid listing');
+      return;
+    }
+
     try {
       setFavoriteLoading(true);
       setFavoriteError(null);
 
       if (isFavorited) {
         // Remove from favorites
-        // Note: favorites API endpoint not yet implemented
-        // For now, just use localStorage
-        const favorites = localStorage.getItem('favorites') || '[]';
-        let favList = JSON.parse(favorites);
-        favList = favList.filter((id: string) => id !== listingId);
-        localStorage.setItem('favorites', JSON.stringify(favList));
+        await api.removeFromFavorites(listingId);
       } else {
         // Add to favorites
-        // Note: favorites API endpoint not yet implemented
-        // For now, just use localStorage
-        const favorites = localStorage.getItem('favorites') || '[]';
-        let favList = JSON.parse(favorites);
-        if (!favList.includes(listingId)) {
-          favList.push(listingId);
-        }
-        localStorage.setItem('favorites', JSON.stringify(favList));
+        await api.addToFavorites(listingId);
       }
 
       setIsFavorited(!isFavorited);
@@ -154,6 +147,8 @@ function ListingContent() {
       const errorMsg = (err as any).message || 'Failed to update favorites';
       console.error('Favorite error:', errorMsg);
       setFavoriteError(errorMsg);
+      // Revert the state change if API call failed
+      setIsFavorited(isFavorited);
     } finally {
       setFavoriteLoading(false);
     }

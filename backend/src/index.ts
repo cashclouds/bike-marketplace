@@ -16,6 +16,7 @@ import modelRoutes from './routes/models';
 import componentRoutes from './routes/components';
 import uploadRoutes from './routes/upload';
 import paymentRoutes from './routes/payments';
+import favoriteRoutes from './routes/favorites';
 
 const app: Express = express();
 const PORT = env.port;
@@ -69,6 +70,7 @@ app.use('/api/models', modelRoutes);
 app.use('/api/components', componentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/favorites', favoriteRoutes);
 
 // Error handling middleware
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {

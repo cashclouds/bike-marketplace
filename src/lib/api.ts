@@ -307,6 +307,32 @@ class ApiClient {
     });
     return this.handleResponse(response);
   }
+
+  // Favorites API
+  async getFavorites() {
+    const response = await fetch(`${this.baseUrl}/favorites`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
+    return this.handleResponse(response);
+  }
+
+  async addToFavorites(listingId: string) {
+    const response = await fetch(`${this.baseUrl}/favorites`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ listing_id: listingId }),
+    });
+    return this.handleResponse(response);
+  }
+
+  async removeFromFavorites(listingId: string) {
+    const response = await fetch(`${this.baseUrl}/favorites/${listingId}`, {
+      method: 'DELETE',
+      headers: this.getHeaders(),
+    });
+    return this.handleResponse(response);
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);
