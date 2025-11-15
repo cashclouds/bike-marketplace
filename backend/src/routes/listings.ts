@@ -385,37 +385,100 @@ router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response): Prom
 router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
+    console.log('[DELETE] Starting deletion of listing:', id);
+    console.log('[DELETE] Request user ID:', req.user?.id);
 
     // Check if user is the owner
     const listingResult = await query('SELECT user_id, photos FROM listings WHERE id = $1', [id]);
 
     if (listingResult.rows.length === 0) {
+      console.log('[DELETE] Listing not found:', id);
       res.status(404).json({ error: 'Listing not found' });
       return;
     }
 
-    if (listingResult.rows[0].user_id !== req.user?.id) {
+    const listing = listingResult.rows[0];
+    console.log('[DELETE] Listing user_id:', listing.user_id, 'Request user_id:', req.user?.id);
+
+    if (listing.user_id !== req.user?.id) {
+      console.log('[DELETE] ❌ Unauthorized: User', req.user?.id, 'does not own listing', id);
       res.status(403).json({ error: 'Not authorized to delete this listing' });
       return;
     }
 
-    // Delete associated photo files
-    if (listingResult.rows[0].photos) {
-      const photos = JSON.parse(listingResult.rows[0].photos);
-      photos.forEach((photo: any) => {
-        const filePath = path.join(uploadsDir, photo.filename);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
+    console.log('[DELETE] ✅ User authorized, proceeding with deletion...');
+
+    // Step 1: Delete messages associated with this listing (CASCADE)
+    console.log('[DELETE] Step 1: Deleting messages...');
+    await query('DELETE FROM messages WHERE listing_id = $1', [id]);
+    console.log('[DELETE] ✅ Messages deleted');
+
+    // Step 2: Delete reviews associated with transactions from this listing
+    console.log('[DELETE] Step 2: Deleting reviews from transactions...');
+    await query(
+      `DELETE FROM reviews
+       WHERE transaction_id IN (
+         SELECT id FROM transactions WHERE listing_id = $1
+       )`,
+      [id]
+    );
+    console.log('[DELETE] ✅ Reviews deleted');
+
+    // Step 3: Delete transactions associated with this listing
+    console.log('[DELETE] Step 3: Deleting transactions...');
+    await query('DELETE FROM transactions WHERE listing_id = $1', [id]);
+    console.log('[DELETE] ✅ Transactions deleted');
+
+    // Step 4: Delete the listing itself
+    console.log('[DELETE] Step 4: Deleting listing...');
+    const deleteResult = await query('DELETE FROM listings WHERE id = $1 RETURNING *', [id]);
+    console.log('[DELETE] ✅ Listing deleted');
+
+    // Step 5: Delete associated photo files from storage
+    if (listing.photos) {
+      try {
+        console.log('[DELETE] Step 5: Deleting photo files...');
+        const photos = JSON.parse(listing.photos);
+        for (const photo of photos) {
+          try {
+            // Try to delete from Cloudinary if it's a Cloudinary URL
+            if (photo.url && photo.url.includes('cloudinary')) {
+              console.log('[DELETE] Attempting to delete from Cloudinary:', photo.url);
+              await deleteFromCloudinary(photo.url).catch(e => {
+                console.log('[DELETE] Cloudinary delete failed (not critical):', e);
+              });
+            } else if (photo.filename) {
+              // Delete local file
+              const filePath = path.join(uploadsDir, photo.filename);
+              if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log('[DELETE] ✅ Local photo file deleted:', photo.filename);
+              }
+            }
+          } catch (photoError) {
+            console.log('[DELETE] Warning: Could not delete photo:', photo.filename, photoError);
+            // Don't fail the whole operation if photo deletion fails
+          }
         }
-      });
+        console.log('[DELETE] ✅ Photo files cleanup completed');
+      } catch (photoParseError) {
+        console.log('[DELETE] Warning: Could not parse photos JSON:', photoParseError);
+      }
     }
 
-    await query('DELETE FROM listings WHERE id = $1', [id]);
-
+    console.log('[DELETE] ✅✅✅ Listing deletion completed successfully');
     res.json({ message: 'Listing deleted successfully' });
   } catch (error) {
+    console.error('[DELETE] ❌ Error during deletion:', error);
+    console.error('[DELETE] Error message:', (error as any).message);
+    console.error('[DELETE] Error code:', (error as any).code);
+    console.error('[DELETE] Error detail:', (error as any).detail);
     logger.error('Delete listing error:', error as Error);
-    res.status(500).json({ error: 'Failed to delete listing' });
+    res.status(500).json({
+      error: 'Failed to delete listing',
+      details: (error as any).message,
+      code: (error as any).code
+    });
   }
 });
 
