@@ -83,9 +83,12 @@ function ListingContent() {
   };
 
   // Format seller name (e.g., "Sergei Martonov" → "Sergei M.")
-  const formatSellerName = (fullName: string): string => {
-    if (!fullName) return 'Anonymous';
-    const parts = fullName.trim().split(' ');
+  const formatSellerName = (fullName: string | null | undefined): string => {
+    if (!fullName || typeof fullName !== 'string') return 'Anonymous';
+    const trimmed = fullName.trim();
+    if (!trimmed) return 'Anonymous';
+    const parts = trimmed.split(' ').filter(p => p.length > 0);
+    if (parts.length === 0) return 'Anonymous';
     if (parts.length === 1) return parts[0];
     return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`;
   };

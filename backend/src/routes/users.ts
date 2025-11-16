@@ -162,7 +162,19 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    res.json({ user: result.rows[0] });
+    const user = result.rows[0];
+
+    // Ensure name is always a string (never null)
+    const userData = {
+      id: user.id,
+      email: user.email,
+      name: user.name || '', // Default to empty string if null
+      user_type: user.user_type,
+      phone: user.phone || null,
+      created_at: user.created_at,
+    };
+
+    res.json({ user: userData });
   } catch (error) {
     logger.error('Get user by ID error:', error as Error);
     res.status(500).json({ error: 'Failed to fetch user' });
