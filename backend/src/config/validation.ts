@@ -12,23 +12,23 @@ import { z } from 'zod';
 export const registerSchema = z.object({
   email: z
     .string()
-    .email('Некорректный email')
+    .email('validation_email_invalid')
     .toLowerCase(),
   password: z
     .string()
-    .min(8, 'Пароль должен быть минимум 8 символов')
-    .max(128, 'Пароль не может быть больше 128 символов'),
+    .min(8, 'validation_password_min_8')
+    .max(128, 'validation_password_max_128'),
   name: z
     .string()
-    .min(2, 'Имя должно быть минимум 2 символа')
-    .max(100, 'Имя не может быть больше 100 символов'),
+    .min(2, 'validation_name_min_2')
+    .max(100, 'validation_name_max_100'),
   user_type: z
     .enum(['individual', 'business'])
     .optional()
     .default('individual'),
   phone: z
     .string()
-    .max(20, 'Номер телефона не может быть больше 20 символов')
+    .max(20, 'validation_phone_max_20')
     .optional()
     .nullable(),
 });
@@ -36,27 +36,27 @@ export const registerSchema = z.object({
 export const loginSchema = z.object({
   email: z
     .string()
-    .email('Некорректный email')
+    .email('validation_email_invalid')
     .toLowerCase(),
   password: z
     .string()
-    .min(1, 'Пароль обязателен'),
+    .min(1, 'validation_password_required'),
 });
 
 export const updateProfileSchema = z.object({
   name: z
     .string()
-    .min(2, 'Имя должно быть минимум 2 символа')
-    .max(100, 'Имя не может быть больше 100 символов')
+    .min(2, 'validation_name_min_2')
+    .max(100, 'validation_name_max_100')
     .optional(),
   email: z
     .string()
-    .email('Некорректный email')
+    .email('validation_email_invalid')
     .toLowerCase()
     .optional(),
   phone: z
     .string()
-    .max(20, 'Номер телефона не может быть больше 20 символов')
+    .max(20, 'validation_phone_max_20')
     .optional()
     .nullable(),
 });
@@ -68,10 +68,10 @@ export const updateProfileSchema = z.object({
 export const createListingSchema = z.object({
   brand: z
     .string()
-    .min(1, 'Марка не может быть пустой'),
+    .min(1, 'validation_brand_required'),
   model: z
     .string()
-    .min(1, 'Модель не может быть пустой')
+    .min(1, 'validation_model_required')
     .optional(),
   year: z
     .string()
@@ -80,8 +80,8 @@ export const createListingSchema = z.object({
     .pipe(
       z
         .number()
-        .min(1900, 'Год не может быть раньше 1900')
-        .max(new Date().getFullYear() + 1, 'Год не может быть в будущем')
+        .min(1900, 'validation_year_min_1900')
+        .max(new Date().getFullYear() + 1, 'validation_year_max_future')
     ),
   condition: z
     .enum(['new', 'like-new', 'used', 'damaged'])
@@ -94,48 +94,48 @@ export const createListingSchema = z.object({
     .pipe(
       z
         .number()
-        .positive('Цена должна быть положительным числом')
-        .max(1000000, 'Цена не может превышать 1,000,000')
+        .positive('validation_price_positive')
+        .max(1000000, 'validation_price_max_1000000')
     ),
   description: z
     .string()
-    .min(10, 'Описание должно быть минимум 10 символов')
-    .max(2000, 'Описание не может быть больше 2000 символов')
+    .min(10, 'validation_description_min_10')
+    .max(2000, 'validation_description_max_2000')
     .optional(),
   location: z
     .string()
-    .min(2, 'Местоположение должно быть минимум 2 символа')
-    .max(100, 'Местоположение не может быть больше 100 символов'),
+    .min(2, 'validation_location_min_2')
+    .max(100, 'validation_location_max_100'),
   type: z
     .enum(['road', 'mountain', 'hybrid', 'cruiser', 'bmx', 'electric'])
     .optional(),
   frame_size: z
     .string()
-    .max(20, 'Размер рамы не может быть больше 20 символов')
+    .max(20, 'validation_frame_size_max_20')
     .optional(),
   frame_material: z
     .string()
-    .max(50, 'Материал рамы не может быть больше 50 символов')
+    .max(50, 'validation_frame_material_max_50')
     .optional(),
   seller_phone: z
     .string()
-    .max(20, 'Телефон не может быть больше 20 символов')
+    .max(20, 'validation_seller_phone_max_20')
     .optional()
     .nullable(),
   seller_telegram: z
     .string()
-    .max(100, 'Telegram username не может быть больше 100 символов')
+    .max(100, 'validation_seller_telegram_max_100')
     .optional()
     .nullable(),
   seller_whatsapp: z
     .string()
-    .max(20, 'WhatsApp номер не может быть больше 20 символов')
+    .max(20, 'validation_seller_whatsapp_max_20')
     .optional()
     .nullable(),
   seller_email: z
     .string()
-    .email('Некорректный email адрес')
-    .max(255, 'Email не может быть больше 255 символов')
+    .email('validation_email_invalid')
+    .max(255, 'validation_seller_email_max_255')
     .optional()
     .nullable(),
 });
