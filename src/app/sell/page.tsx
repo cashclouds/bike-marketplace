@@ -25,6 +25,10 @@ export default function SellPage() {
     description: '',
     location: '',
     photos: [] as any[],
+    seller_phone: '',
+    seller_telegram: '',
+    seller_whatsapp: '',
+    seller_email: '',
   });
 
   useEffect(() => {
@@ -103,6 +107,10 @@ export default function SellPage() {
       data.append('price', String(formData.price)); // Ensure price is string for Zod validation
       data.append('description', formData.description);
       data.append('location', formData.location);
+      if (formData.seller_phone) data.append('seller_phone', formData.seller_phone);
+      if (formData.seller_telegram) data.append('seller_telegram', formData.seller_telegram);
+      if (formData.seller_whatsapp) data.append('seller_whatsapp', formData.seller_whatsapp);
+      if (formData.seller_email) data.append('seller_email', formData.seller_email);
 
       // Add photos
       console.log('Photos to upload:', formData.photos.length);
@@ -287,6 +295,61 @@ export default function SellPage() {
                   className="w-full px-4 py-3 border rounded-lg"
                 />
               </div>
+
+              {/* Contact Methods Section */}
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">{t('contactMethods')}</h3>
+                <p className="text-sm text-gray-600 mb-4">{t('contactWarning')}</p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">{t('phone')}</label>
+                    <input
+                      type="tel"
+                      placeholder={t('phoneExample')}
+                      value={formData.seller_phone}
+                      onChange={(e) => handleInputChange('seller_phone', e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">{t('telegram')}</label>
+                    <input
+                      type="text"
+                      placeholder="@username"
+                      value={formData.seller_telegram}
+                      onChange={(e) => handleInputChange('seller_telegram', e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">{t('whatsapp')}</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="tel"
+                        placeholder={t('phoneExample')}
+                        value={formData.seller_whatsapp}
+                        onChange={(e) => handleInputChange('seller_whatsapp', e.target.value)}
+                        className="flex-1 px-4 py-3 border rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">{t('email')}</label>
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.seller_email}
+                      onChange={(e) => handleInputChange('seller_email', e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex gap-4">
                 <button onClick={() => setStep(1)} className="flex-1 px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300">← {t('back')}</button>
                 <button onClick={() => setStep(3)} className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{t('next')} →</button>

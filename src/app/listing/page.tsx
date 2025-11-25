@@ -527,12 +527,79 @@ function ListingContent() {
 
               {/* Action Buttons */}
               <div className="bg-white rounded-lg shadow-md p-6 space-y-3">
-                <button
-                  onClick={handleContactSeller}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  💬 {t('contactSeller')}
-                </button>
+                {/* Contact Methods Section */}
+                <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-900 mb-3">
+                    <strong>ℹ️ {t('contactWarning')}</strong>
+                  </p>
+
+                  <h3 className="font-bold text-gray-900 mb-3">{t('contactMethods')}</h3>
+
+                  {/* Messenger Icons */}
+                  <div className="flex flex-wrap gap-3">
+                    {/* Phone */}
+                    {listing?.seller_phone && (
+                      <a
+                        href={`tel:${listing.seller_phone}`}
+                        className="flex items-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg transition-colors"
+                        title={`Call: ${listing.seller_phone}`}
+                      >
+                        <span className="text-lg">☎️</span>
+                        <span className="text-sm font-medium">{t('phone')}</span>
+                      </a>
+                    )}
+
+                    {/* Telegram */}
+                    {listing?.seller_telegram && (
+                      <a
+                        href={`https://t.me/${listing.seller_telegram.replace('@', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg transition-colors"
+                        title={`Telegram: ${listing.seller_telegram}`}
+                      >
+                        <span className="text-lg">✈️</span>
+                        <span className="text-sm font-medium">{t('telegram')}</span>
+                      </a>
+                    )}
+
+                    {/* WhatsApp */}
+                    {listing?.seller_whatsapp && (
+                      <a
+                        href={`https://wa.me/${listing.seller_whatsapp.replace(/[^\d+]/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg transition-colors"
+                        title={`WhatsApp: ${listing.seller_whatsapp}`}
+                      >
+                        <span className="text-lg">💬</span>
+                        <span className="text-sm font-medium">{t('whatsapp')}</span>
+                      </a>
+                    )}
+
+                    {/* Email */}
+                    {listing?.seller_email && (
+                      <a
+                        href={`mailto:${listing.seller_email}`}
+                        className="flex items-center gap-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg transition-colors"
+                        title={`Email: ${listing.seller_email}`}
+                      >
+                        <span className="text-lg">📧</span>
+                        <span className="text-sm font-medium">{t('email')}</span>
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Fallback to seller profile */}
+                  {!listing?.seller_phone && !listing?.seller_telegram && !listing?.seller_whatsapp && !listing?.seller_email && (
+                    <button
+                      onClick={handleContactSeller}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                      💬 {t('contactSeller')}
+                    </button>
+                  )}
+                </div>
                 <div>
                   <button
                     onClick={handleFavorite}

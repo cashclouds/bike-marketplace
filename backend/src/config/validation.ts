@@ -117,6 +117,27 @@ export const createListingSchema = z.object({
     .string()
     .max(50, 'Материал рамы не может быть больше 50 символов')
     .optional(),
+  seller_phone: z
+    .string()
+    .max(20, 'Телефон не может быть больше 20 символов')
+    .optional()
+    .nullable(),
+  seller_telegram: z
+    .string()
+    .max(100, 'Telegram username не может быть больше 100 символов')
+    .optional()
+    .nullable(),
+  seller_whatsapp: z
+    .string()
+    .max(20, 'WhatsApp номер не может быть больше 20 символов')
+    .optional()
+    .nullable(),
+  seller_email: z
+    .string()
+    .email('Некорректный email адрес')
+    .max(255, 'Email не может быть больше 255 символов')
+    .optional()
+    .nullable(),
 });
 
 export const updateListingSchema = createListingSchema.partial();
