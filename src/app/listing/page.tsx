@@ -158,16 +158,24 @@ function ListingContent() {
     }
   };
 
-  // Handle contact seller - show coming soon message
+  // Handle contact seller - navigate to seller profile
   const handleContactSeller = () => {
     console.log('[Listing] Contact seller clicked');
-    alert('💬 Messaging feature is coming soon!\n\nYou can contact the seller through their profile.');
+    if (listing?.user_id) {
+      router.push(`/seller?user_id=${listing.user_id}`);
+    } else {
+      console.warn('[Listing] No user_id found');
+    }
   };
 
-  // Handle buy now - show coming soon message
+  // Handle buy now - navigate to seller profile
   const handleBuyNow = () => {
     console.log('[Listing] Buy now clicked');
-    alert('🛒 Checkout feature is coming soon!\n\nPlease contact the seller to arrange payment.');
+    if (listing?.user_id) {
+      router.push(`/seller?user_id=${listing.user_id}`);
+    } else {
+      console.warn('[Listing] No user_id found');
+    }
   };
 
   // Handle view seller profile
