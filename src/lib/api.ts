@@ -7,50 +7,26 @@ export interface ApiResponse<T> {
 
 class ApiClient {
   private baseUrl: string;
-  private token: string | null = null;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
-    this.loadToken();
   }
 
-  private loadToken(): void {
-    if (typeof window !== 'undefined') {
-      this.token = localStorage.getItem('authToken');
-      console.log('[API] loadToken: token from localStorage:', this.token ? `${this.token.substring(0, 20)}...` : 'NULL');
-    }
-  }
-
-  setToken(token: string): void {
-    this.token = token;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('authToken', token);
-      console.log('[API] setToken: saved to localStorage, token:', `${token.substring(0, 20)}...`);
-      console.log('[API] setToken: verified in localStorage:', localStorage.getItem('authToken') ? 'YES ✅' : 'NO ❌');
-    }
+  setToken(_token: string): void {
+    // With httpOnly cookies, we don't store tokens in memory or localStorage
+    // Cookies are automatically sent by the browser with each request
+    console.log('[API] Token received - httpOnly cookie will be set by server');
   }
 
   clearToken(): void {
-    this.token = null;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('authToken');
-      console.log('[API] clearToken: removed from localStorage');
-    }
+    // Logout will clear the cookies server-side
+    console.log('[API] Token cleared');
   }
 
   private getHeaders(): HeadersInit {
-    // Reload token from localStorage before each request to ensure we have the latest token
-    this.loadToken();
-
-    const headers: HeadersInit = {
+    return {
       'Content-Type': 'application/json',
     };
-
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
-    }
-
-    return headers;
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -82,14 +58,11 @@ class ApiClient {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({ email, password, name, user_type: userType, phone }),
+      credentials: 'include', // Include cookies in the request
+      credentials: 'include',
     });
     const data = (await this.handleResponse(response)) as any;
-    // Backend returns accessToken, not token
-    const token = data.accessToken || data.token;
-    if (token) {
-      this.setToken(token);
-      console.log('[API] registerUser: saved token to localStorage');
-    }
+    console.log('[API] registerUser: success - httpOnly cookie set by server');
     return data;
   }
 
@@ -98,14 +71,11 @@ class ApiClient {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({ email, password }),
+      credentials: 'include', // Include cookies in the request
+      credentials: 'include',
     });
     const data = (await this.handleResponse(response)) as any;
-    // Backend returns accessToken, not token
-    const token = data.accessToken || data.token;
-    if (token) {
-      this.setToken(token);
-      console.log('[API] loginUser: saved token to localStorage');
-    }
+    console.log('[API] loginUser: success - httpOnly cookie set by server');
     return data;
   }
 
@@ -113,6 +83,8 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/users/me`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -121,6 +93,8 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/users/${userId}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -130,6 +104,8 @@ class ApiClient {
       method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify({ name, phone }),
+      credentials: 'include',
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -153,11 +129,14 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
+      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/listings?${queryString.toString()}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -166,6 +145,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/listings/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -188,6 +168,7 @@ class ApiClient {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -206,6 +187,7 @@ class ApiClient {
       method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -214,6 +196,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/listings/${id}`, {
       method: 'DELETE',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -223,6 +206,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/brands`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -231,6 +215,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/brands/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -239,6 +224,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/brands/${brandId}/models`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -255,11 +241,13 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
+      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/models?${queryString.toString()}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -268,6 +256,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/models/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -283,11 +272,13 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
+      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/components?${queryString.toString()}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -296,6 +287,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/components/categories`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -304,6 +296,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/components/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -313,6 +306,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/favorites`, {
       method: 'GET',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -322,6 +316,7 @@ class ApiClient {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({ listing_id: listingId }),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -330,6 +325,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/favorites/${listingId}`, {
       method: 'DELETE',
       headers: this.getHeaders(),
+      credentials: 'include',
     });
     return this.handleResponse(response);
   }

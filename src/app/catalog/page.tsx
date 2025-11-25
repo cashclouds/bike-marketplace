@@ -430,7 +430,13 @@ export default function CatalogPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {listings.map((item: any) => {
-                  const photos = typeof item.photos === 'string' ? JSON.parse(item.photos) : item.photos || [];
+                  let photos = [];
+                  try {
+                    photos = typeof item.photos === 'string' ? JSON.parse(item.photos) : item.photos || [];
+                  } catch (err) {
+                    console.error('Error parsing photos for listing', item.id, ':', err);
+                    photos = [];
+                  }
                   const firstPhoto = photos.length > 0 ? photos[0] : null;
 
                   return (

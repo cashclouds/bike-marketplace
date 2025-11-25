@@ -1,5 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 
 import { env } from './config/env';
@@ -9,6 +10,7 @@ import { helmetConfig } from './config/helmet';
 import { corsOptions } from './config/cors';
 import { compressionMiddleware } from './config/compression';
 import { logger, httpLogger } from './config/logger';
+import { generateCsrfToken, verifyCsrfToken } from './middleware/csrf';
 import userRoutes from './routes/users';
 import listingRoutes from './routes/listings';
 import brandRoutes from './routes/brands';
@@ -32,6 +34,13 @@ app.use(compressionMiddleware);
 
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Cookie parser middleware (for httpOnly cookies)
+app.use(cookieParser());
+
+// CSRF protection middleware (Double Submit Cookie pattern)
+app.use(generateCsrfToken);
+app.use(verifyCsrfToken);
 
 // Apply general rate limiting to all routes
 app.use(generalLimiter);

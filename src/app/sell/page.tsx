@@ -19,6 +19,7 @@ export default function SellPage() {
   // Form state
   const [formData, setFormData] = useState({
     brand: '',
+    model: '',
     year: '',
     price: '',
     description: '',
@@ -97,7 +98,7 @@ export default function SellPage() {
       // Create FormData for multipart upload
       const data = new FormData();
       data.append('brand', formData.brand);
-      data.append('model', formData.brand); // Use brand as model if not separately provided
+      data.append('model', formData.model || formData.brand); // Use model if provided, otherwise fallback to brand
       data.append('year', String(formData.year)); // Ensure year is string for Zod validation
       data.append('price', String(formData.price)); // Ensure price is string for Zod validation
       data.append('description', formData.description);
@@ -113,29 +114,10 @@ export default function SellPage() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       console.log('Sending to:', apiUrl + '/listings');
 
-      // Get auth token
-      console.log('[SellPage] About to get token from localStorage...');
-      console.log('[SellPage] All localStorage keys:', Object.keys(localStorage));
-      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      console.log('[SellPage] Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'NULL');
-
-      if (!token) {
-        console.log('❌ No token found - user may have been logged out');
-        console.log('[SellPage] localStorage.authToken:', localStorage.getItem('authToken'));
-        console.log('[SellPage] localStorage contents:', localStorage);
-        setError(t('tokenNotFound'));
-        setLoading(false);
-        return;
-      }
-
-      console.log('✅ Publishing with token:', token.substring(0, 20) + '...');
-
       const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
         body: data,
+        credentials: 'include', // Include httpOnly cookies automatically
       });
 
       console.log('Response status:', response.status);
@@ -245,6 +227,16 @@ export default function SellPage() {
                   <option value="">{t('selectBrand')}</option>
                   {brands.map((b) => <option key={b}>{b}</option>)}
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{t('model')}</label>
+                <input
+                  type="text"
+                  placeholder={t('enterModel') || 'e.g., Trek Domane SL 5'}
+                  value={formData.model}
+                  onChange={(e) => handleInputChange('model', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">{t('year')} *</label>

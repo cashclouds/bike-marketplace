@@ -85,7 +85,22 @@ router.post('/upload-multiple', uploadLimiter, authMiddleware, upload.array('ima
 router.delete('/delete/:filename', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { filename } = req.params;
+
+    // Validate filename - prevent path traversal attacks
+    if (!filename || filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+      res.status(400).json({ error: 'Invalid filename' });
+      return;
+    }
+
     const filePath = path.join(uploadsDir, filename);
+
+    // Ensure the resolved path is within uploads directory
+    const resolvedPath = path.resolve(filePath);
+    const resolvedUploadsDir = path.resolve(uploadsDir);
+    if (!resolvedPath.startsWith(resolvedUploadsDir)) {
+      res.status(400).json({ error: 'Invalid file path' });
+      return;
+    }
 
     if (!fs.existsSync(filePath)) {
       res.status(404).json({ error: 'File not found' });

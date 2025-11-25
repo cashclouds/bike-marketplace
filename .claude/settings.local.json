@@ -38,7 +38,9 @@
       "WebFetch(domain:www.auto24.ee)",
       "WebFetch(domain:bike-marketplace-rho.vercel.app)",
       "Bash(git checkout:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(git check-ignore:*)"
     ],
     "deny": [],
     "ask": []

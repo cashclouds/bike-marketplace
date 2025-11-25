@@ -49,11 +49,23 @@ router.post('/register', registerLimiter, async (_req: Request, res: Response): 
       userType: user_type,
     });
 
+    // Set httpOnly cookies for tokens
+    res.cookie('accessToken', tokenPair.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+    res.cookie('refreshToken', tokenPair.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
       user: { id: userId, email, name, user_type },
-      accessToken: tokenPair.accessToken,
-      refreshToken: tokenPair.refreshToken,
       expiresIn: tokenPair.expiresIn,
     });
   } catch (error) {
@@ -106,11 +118,23 @@ router.post('/login', authLimiter, async (_req: Request, res: Response): Promise
       email: user.email,
     });
 
+    // Set httpOnly cookies for tokens
+    res.cookie('accessToken', tokenPair.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+    res.cookie('refreshToken', tokenPair.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
     res.json({
       message: 'Login successful',
       user: { id: user.id, email: user.email, name: user.name, user_type: user.user_type },
-      accessToken: tokenPair.accessToken,
-      refreshToken: tokenPair.refreshToken,
       expiresIn: tokenPair.expiresIn,
     });
   } catch (error) {

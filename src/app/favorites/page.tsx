@@ -88,9 +88,14 @@ export default function FavoritesPage() {
 
   const handleRemove = (listingId: string) => {
     setFavorites((prev) => prev.filter((l) => l.id !== listingId));
-    const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const updated = favIds.filter((id: string) => id !== listingId);
-    localStorage.setItem('favorites', JSON.stringify(updated));
+    try {
+      const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
+      const updated = favIds.filter((id: string) => id !== listingId);
+      localStorage.setItem('favorites', JSON.stringify(updated));
+    } catch (err) {
+      console.error('Error removing favorite:', err);
+      localStorage.setItem('favorites', JSON.stringify([]));
+    }
   };
 
   return (

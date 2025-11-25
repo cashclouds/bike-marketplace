@@ -13,7 +13,13 @@ export interface AuthRequest extends Request {
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
   try {
-    const token = extractTokenFromHeader(req.headers.authorization);
+    // Try to get token from Authorization header first (for backward compatibility)
+    let token = extractTokenFromHeader(req.headers.authorization);
+
+    // If not found in header, try to get from httpOnly cookie
+    if (!token && req.cookies && req.cookies.accessToken) {
+      token = req.cookies.accessToken;
+    }
 
     if (!token) {
       res.status(401).json({ error: 'No token provided' });
@@ -36,7 +42,13 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
 export const optionalAuth = (req: AuthRequest, _res: Response, next: NextFunction): void => {
   try {
-    const token = extractTokenFromHeader(req.headers.authorization);
+    // Try to get token from Authorization header first
+    let token = extractTokenFromHeader(req.headers.authorization);
+
+    // If not found in header, try to get from httpOnly cookie
+    if (!token && req.cookies && req.cookies.accessToken) {
+      token = req.cookies.accessToken;
+    }
 
     if (token) {
       const decoded = verifyAccessToken(token);
