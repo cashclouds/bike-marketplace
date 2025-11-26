@@ -38,9 +38,9 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Cookie parser middleware (for httpOnly cookies)
 app.use(cookieParser());
 
-// CSRF protection middleware (Double Submit Cookie pattern)
-app.use(generateCsrfToken);
-app.use(verifyCsrfToken);
+// CSRF protection middleware (disabled for API routes - we use JWT tokens instead)
+// app.use(generateCsrfToken);
+// app.use(verifyCsrfToken);
 
 // Apply general rate limiting to all routes
 app.use(generalLimiter);
