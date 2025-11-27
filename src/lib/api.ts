@@ -59,7 +59,6 @@ class ApiClient {
       headers: this.getHeaders(),
       body: JSON.stringify({ email, password, name, user_type: userType, phone }),
       credentials: 'include', // Include cookies in the request
-      credentials: 'include',
     });
     const data = (await this.handleResponse(response)) as any;
     console.log('[API] registerUser: success - httpOnly cookie set by server');
@@ -72,7 +71,6 @@ class ApiClient {
       headers: this.getHeaders(),
       body: JSON.stringify({ email, password }),
       credentials: 'include', // Include cookies in the request
-      credentials: 'include',
     });
     const data = (await this.handleResponse(response)) as any;
     console.log('[API] loginUser: success - httpOnly cookie set by server');
@@ -84,7 +82,6 @@ class ApiClient {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
-      credentials: 'include',
     });
     return this.handleResponse(response);
   }
@@ -93,7 +90,6 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/users/${userId}`, {
       method: 'GET',
       headers: this.getHeaders(),
-      credentials: 'include',
       credentials: 'include',
     });
     return this.handleResponse(response);
@@ -104,7 +100,6 @@ class ApiClient {
       method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify({ name, phone }),
-      credentials: 'include',
       credentials: 'include',
     });
     return this.handleResponse(response);
@@ -129,13 +124,11 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
-      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/listings?${queryString.toString()}`, {
       method: 'GET',
       headers: this.getHeaders(),
-      credentials: 'include',
       credentials: 'include',
     });
     return this.handleResponse(response);
@@ -241,7 +234,6 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
-      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/models?${queryString.toString()}`, {
@@ -272,7 +264,6 @@ class ApiClient {
       if (value !== undefined && value !== null) {
         queryString.append(key, String(value));
       }
-      credentials: 'include',
     });
 
     const response = await fetch(`${this.baseUrl}/components?${queryString.toString()}`, {

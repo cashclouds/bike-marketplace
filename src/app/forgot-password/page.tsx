@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
 
   // Translation function
   const t = (key: string): string => {
-    return translations[lang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    return (translations as any)[lang]?.[key as keyof typeof translations.en] || key;
   };
 
   const handleSendResetLink = async (e: React.FormEvent) => {

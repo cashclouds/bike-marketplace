@@ -33,7 +33,7 @@ export default function FavoritesPage() {
   // Translation function
   const t = (key: string): string => {
     const currentLang = lang && langLoaded ? lang : 'en';
-    return translations[currentLang as keyof typeof translations]?.[key as keyof typeof translations.en] || key;
+    return (translations as any)[currentLang]?.[key] || key;
   };
 
   useEffect(() => {

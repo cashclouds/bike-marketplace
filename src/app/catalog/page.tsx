@@ -46,11 +46,11 @@ export default function CatalogPage() {
         setError(null);
 
         // Fetch brands
-        const brandsResponse = await api.getBrands();
+        const brandsResponse = (await api.getBrands()) as any;
         setBrands(brandsResponse.brands || []);
 
         // Fetch listings
-        const listingsResponse = await api.getListings({
+        const listingsResponse = (await api.getListings({
           ...(filters.brand_id && { brand_id: filters.brand_id }),
           ...(filters.type && { type: filters.type }),
           ...(filters.minPrice && { minPrice: parseInt(filters.minPrice) }),
@@ -61,7 +61,7 @@ export default function CatalogPage() {
           ...(filters.location && { location: filters.location }),
           ...(filters.search && { search: filters.search }),
           limit: 20,
-        });
+        })) as any;
         setListings(listingsResponse.listings || []);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -95,7 +95,7 @@ export default function CatalogPage() {
     });
   };
 
-  const t = (key: string) => translations[lang]?.[key as keyof typeof translations.en] || key;
+  const t = (key: string) => (translations as any)[lang]?.[key as keyof typeof translations.en] || key;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -250,7 +250,7 @@ export default function CatalogPage() {
                 ))}
               </div>
             )}
-сл          </main>
+          </main>
         </div>
       </div>
     </div>

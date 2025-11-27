@@ -63,7 +63,7 @@ export default function Home() {
 
   const t = (key: string) => {
     const currentLang = lang && langLoaded ? lang : 'en';
-    return translations[currentLang as keyof typeof translations][key as keyof typeof translations.en] || key;
+    return (translations as any)[currentLang][key as keyof typeof translations.en] || key;
   };
 
   // Fetch listings based on search query
