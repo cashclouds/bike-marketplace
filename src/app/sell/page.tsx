@@ -297,19 +297,19 @@ export default function SellPage() {
               </div>
 
               {/* Contact Methods Section */}
-              <div className="border-t pt-6">
+              <div className="border-t pt-6 mt-6">
                 <h3 className="text-lg font-medium mb-4">{t('contactMethods')}</h3>
-                <p className="text-sm text-gray-600 mb-4">{t('contactWarning')}</p>
+                <p className="text-sm text-gray-500 mb-4">{t('contactWarning')}</p>
 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">{t('phone')}</label>
                     <input
                       type="tel"
-                      placeholder={t('phoneExample')}
+                      placeholder="+372 5XX XXXX"
                       value={formData.seller_phone}
                       onChange={(e) => handleInputChange('seller_phone', e.target.value)}
-                      className="w-full px-4 py-3 border rounded-lg"
+                      className="w-full px-4 py-3 border rounded-lg bg-gray-700 text-white"
                     />
                   </div>
 
@@ -320,21 +320,19 @@ export default function SellPage() {
                       placeholder="@username"
                       value={formData.seller_telegram}
                       onChange={(e) => handleInputChange('seller_telegram', e.target.value)}
-                      className="w-full px-4 py-3 border rounded-lg"
+                      className="w-full px-4 py-3 border rounded-lg bg-gray-700 text-white"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2">{t('whatsapp')}</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="tel"
-                        placeholder={t('phoneExample')}
-                        value={formData.seller_whatsapp}
-                        onChange={(e) => handleInputChange('seller_whatsapp', e.target.value)}
-                        className="flex-1 px-4 py-3 border rounded-lg"
-                      />
-                    </div>
+                    <input
+                      type="tel"
+                      placeholder="+372 5XX XXXX"
+                      value={formData.seller_whatsapp}
+                      onChange={(e) => handleInputChange('seller_whatsapp', e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg bg-gray-700 text-white"
+                    />
                   </div>
 
                   <div>
@@ -344,7 +342,7 @@ export default function SellPage() {
                       placeholder="your@email.com"
                       value={formData.seller_email}
                       onChange={(e) => handleInputChange('seller_email', e.target.value)}
-                      className="w-full px-4 py-3 border rounded-lg"
+                      className="w-full px-4 py-3 border rounded-lg bg-gray-700 text-white"
                     />
                   </div>
                 </div>
