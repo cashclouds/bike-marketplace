@@ -66,6 +66,8 @@ router.post('/register', registerLimiter, async (_req: Request, res: Response): 
     res.status(201).json({
       message: 'User registered successfully',
       user: { id: userId, email, name, user_type },
+      accessToken: tokenPair.accessToken,
+      refreshToken: tokenPair.refreshToken,
       expiresIn: tokenPair.expiresIn,
     });
   } catch (error) {
@@ -135,6 +137,8 @@ router.post('/login', authLimiter, async (_req: Request, res: Response): Promise
     res.json({
       message: 'Login successful',
       user: { id: user.id, email: user.email, name: user.name, user_type: user.user_type },
+      accessToken: tokenPair.accessToken,
+      refreshToken: tokenPair.refreshToken,
       expiresIn: tokenPair.expiresIn,
     });
   } catch (error) {
