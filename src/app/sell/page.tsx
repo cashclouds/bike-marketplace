@@ -122,10 +122,17 @@ export default function SellPage() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
       console.log('Sending to:', apiUrl + '/listings');
 
+      // Get token from localStorage
+      const token = localStorage.getItem('accessToken');
+      console.log('Token available:', !!token);
+
       const response = await fetch(`${apiUrl}/listings`, {
         method: 'POST',
         body: data,
         credentials: 'include', // Include httpOnly cookies automatically
+        headers: token ? {
+          'Authorization': `Bearer ${token}`,
+        } : {},
       });
 
       console.log('Response status:', response.status);
