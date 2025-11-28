@@ -123,7 +123,7 @@ export default function SellPage() {
       console.log('Sending to:', apiUrl + '/listings');
 
       // Get token from localStorage
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('authToken');
       console.log('Token available:', !!token);
 
       const response = await fetch(`${apiUrl}/listings`, {

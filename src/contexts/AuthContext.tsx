@@ -70,7 +70,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('No token returned from server');
       }
 
-      // api.registerUser already calls setToken internally
+      // Save token and user data to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', token);
+        console.log('Token saved to localStorage as authToken');
+        if (response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+          console.log('User saved to localStorage:', response.user.email);
+        }
+      }
+
+      // Set token in API client
+      api.setToken(token);
       console.log('Token set in API client and localStorage');
 
       setUser(response.user);
@@ -96,13 +107,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('No token returned from server');
       }
 
-      // Save user data to localStorage so we can restore it on page reload
-      if (typeof window !== 'undefined' && response.user) {
-        localStorage.setItem('user', JSON.stringify(response.user));
-        console.log('User saved to localStorage:', response.user.email);
+      // Save token and user data to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', token);
+        console.log('Token saved to localStorage as authToken');
+        if (response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+          console.log('User saved to localStorage:', response.user.email);
+        }
       }
 
-      // api.loginUser already calls setToken internally
+      // Set token in API client
+      api.setToken(token);
       console.log('✅ Token and user saved to localStorage');
 
       setUser(response.user);
@@ -118,6 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     api.clearToken();
     if (typeof window !== 'undefined') {
       localStorage.removeItem('user');
+      localStorage.removeItem('authToken');
     }
     setUser(null);
     setError(null);
