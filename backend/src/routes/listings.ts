@@ -217,6 +217,14 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
       location,
     } = validatedData;
 
+    // Extract seller contact fields from request body
+    const seller_phone = req.body.seller_phone || null;
+    const seller_telegram = req.body.seller_telegram || null;
+    const seller_whatsapp = req.body.seller_whatsapp || null;
+    const seller_email = req.body.seller_email || null;
+
+    console.log('Contact fields:', { seller_phone, seller_telegram, seller_whatsapp, seller_email });
+
     // Upload photos to Cloudinary or use local if not configured
     const uploadedPhotos = [];
 
@@ -295,8 +303,8 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
     // Use model if provided, otherwise use brand as model_name
     const result = await query(
       `INSERT INTO listings
-       (id, user_id, brand_id, model_name, type, year, condition, price, currency, description, location, photos, status, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW(), NOW())
+       (id, user_id, brand_id, model_name, type, year, condition, price, currency, description, location, photos, seller_phone, seller_telegram, seller_whatsapp, seller_email, status, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, NOW(), NOW())
        RETURNING *`,
       [
         listingId,
@@ -311,6 +319,10 @@ router.post('/', listingLimiter, authMiddleware, upload.array('photos', 20), asy
         description,
         location,
         JSON.stringify(uploadedPhotos),
+        seller_phone,
+        seller_telegram,
+        seller_whatsapp,
+        seller_email,
         'active',
       ]
     );
