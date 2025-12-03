@@ -39,11 +39,11 @@ export function generateAccessToken(payload: TokenPayload): string {
 }
 
 /**
- * Generate refresh token (long-lived, default 7 days)
+ * Generate refresh token (long-lived, default 30 days)
  * This token should be stored securely on the server (e.g., in Redis or DB)
  */
 export function generateRefreshToken(payload: TokenPayload): string {
-  const refreshTokenExpiry = process.env.JWT_REFRESH_EXPIRY || '7d';
+  const refreshTokenExpiry = process.env.JWT_REFRESH_EXPIRY || '30d';
 
   try {
     const token = jwt.sign(payload, env.jwtSecret, {
