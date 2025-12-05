@@ -81,10 +81,6 @@ function SellerContent() {
     fetchSellerData();
   }, [userId]);
 
-  const handleContactSeller = () => {
-    alert('💬 Messaging feature is coming soon!\n\nYou can contact the seller through their profile.');
-  };
-
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-50 py-12">
@@ -135,29 +131,73 @@ function SellerContent() {
         <div className="max-w-4xl mx-auto px-4 py-12">
           {/* Seller Profile Card */}
           <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                  {seller.full_name || seller.name || 'Anonymous Seller'}
-                </h1>
-                <p className="text-gray-600 mb-4">
-                  {seller.email && `📧 ${seller.email}`}
-                </p>
-                {seller.phone && (
-                  <p className="text-gray-600 mb-4">
-                    📱 {seller.phone}
-                  </p>
-                )}
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                {seller.full_name || seller.name || 'Anonymous Seller'}
+              </h1>
+              {seller.created_at && (
                 <p className="text-gray-600 mb-4">
                   📅 {t('memberSince')} {new Date(seller.created_at).toLocaleDateString(lang)}
                 </p>
+              )}
+
+              {/* Contact Methods */}
+              <div className="mt-6">
+                <h3 className="font-bold text-gray-900 mb-3">{t('contactMethods') || 'Contact Methods'}</h3>
+                <div className="flex flex-wrap gap-3">
+                  {/* Phone */}
+                  {seller.phone && (
+                    <a
+                      href={`tel:${seller.phone}`}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg transition-colors"
+                      title={`Call: ${seller.phone}`}
+                    >
+                      <span className="text-lg">☎️</span>
+                      <span className="text-sm font-medium">{t('phone') || 'Phone'}</span>
+                    </a>
+                  )}
+
+                  {/* Telegram */}
+                  {seller.telegram && (
+                    <a
+                      href={`https://t.me/${seller.telegram.replace('@', '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg transition-colors"
+                      title={`Telegram: ${seller.telegram}`}
+                    >
+                      <span className="text-lg">✈️</span>
+                      <span className="text-sm font-medium">{t('telegram') || 'Telegram'}</span>
+                    </a>
+                  )}
+
+                  {/* WhatsApp */}
+                  {seller.whatsapp && (
+                    <a
+                      href={`https://wa.me/${seller.whatsapp.replace(/[^\d+]/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg transition-colors"
+                      title={`WhatsApp: ${seller.whatsapp}`}
+                    >
+                      <span className="text-lg">💬</span>
+                      <span className="text-sm font-medium">{t('whatsapp') || 'WhatsApp'}</span>
+                    </a>
+                  )}
+
+                  {/* Email */}
+                  {seller.email && (
+                    <a
+                      href={`mailto:${seller.email}`}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg transition-colors"
+                      title={`Email: ${seller.email}`}
+                    >
+                      <span className="text-lg">📧</span>
+                      <span className="text-sm font-medium">{t('email') || 'Email'}</span>
+                    </a>
+                  )}
+                </div>
               </div>
-              <button
-                onClick={handleContactSeller}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-              >
-                💬 {t('contact') || 'Contact'}
-              </button>
             </div>
 
             {/* Seller Stats */}
@@ -233,9 +273,11 @@ function SellerContent() {
                           <span>
                             {listing.condition && listing.condition.charAt(0).toUpperCase() + listing.condition.slice(1)}
                           </span>
-                          <span>
-                            {new Date(listing.created_at).toLocaleDateString(lang)}
-                          </span>
+                          {listing.created_at && (
+                            <span>
+                              {new Date(listing.created_at).toLocaleDateString(lang)}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>
