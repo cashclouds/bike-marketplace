@@ -241,7 +241,7 @@ function SellerContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {sellerListings.map((listing: any) => {
                   const photos = typeof listing.photos === 'string' ? JSON.parse(listing.photos) : listing.photos || [];
-                  const mainPhoto = photos[0] ? getImageUrl(photos[0]) : '/placeholder-bike.jpg';
+                  const mainPhoto = photos[0]?.url ? getImageUrl(photos[0].url) : '/placeholder-bike.jpg';
 
                   return (
                     <Link
