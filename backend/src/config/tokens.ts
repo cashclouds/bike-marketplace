@@ -20,10 +20,10 @@ export interface TokenPair {
 }
 
 /**
- * Generate access token (short-lived, default 15 minutes)
+ * Generate access token (short-lived, default 30 days)
  */
 export function generateAccessToken(payload: TokenPayload): string {
-  const accessTokenExpiry = process.env.JWT_ACCESS_EXPIRY || '15m';
+  const accessTokenExpiry = process.env.JWT_ACCESS_EXPIRY || '30d';
 
   try {
     const token = jwt.sign(payload, env.jwtSecret, {
@@ -65,8 +65,8 @@ export function generateTokenPair(payload: TokenPayload): TokenPair {
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken(payload);
 
-  // Parse the expiry time of access token (default 15 minutes = 900 seconds)
-  const accessTokenExpiry = 15 * 60; // 15 minutes in seconds
+  // Parse the expiry time of access token (default 30 days = 2592000 seconds)
+  const accessTokenExpiry = 30 * 24 * 60 * 60; // 30 days in seconds
 
   return {
     accessToken,
